@@ -39,9 +39,11 @@ function UIF.DrawTextMultiColor(screen, x, y, offset, text1, text2, text1_color,
 	UIF.DrawTextRight(screen, offset, y, text2, text2_color, background_color)
 end
 
-function UIF.ProgressBar(screen, x, y, length, minVal, maxVal, bar_color, background_color)
+function UIF.ProgressBar(screen, x, y, length, value, minVal, maxVal, bar_color, background_color)
    UIF.DrawLine(screen, x, y, length, background_color)
-   local barSize = math.floor((minVal/maxVal) * length)
+
+   value = math.max(0, math.min(value, maxVal))
+   local barSize = math.floor((value / maxVal) * length)
    UIF.DrawLine(screen, x, y, barSize, bar_color)
 end
 
