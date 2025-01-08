@@ -10,6 +10,20 @@ end
 local DefaultTextColor = colors.white
 local DefaultBackgroundColor = colors.black
 local UIF = require("UIFunctions")
-UIF.Clear(Screen)
+local Counter = 0
 
-UIF.DrawText(Screen, 1,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
+while true do
+    UIF.Clear(Screen)
+
+    UIF.DrawText(Screen, 1,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
+
+    UIF.ProgressBar(Screen, 1,3, 10, Counter, 100, colors.green, colors.gray)
+
+
+
+
+
+    Counter = Counter + 1
+    sleep(0.5)
+end
+
