@@ -7,9 +7,12 @@ elseif peripheral.getType("right") == "monitor" then
     print("Monitor detected, loading program")
 end
 
+local UIF = require("UIFunctions")
+local ScreenX, ScreenY = Screen.getSize()
+
 local DefaultTextColor = colors.white
 local DefaultBackgroundColor = colors.black
-local UIF = require("UIFunctions")
+
 local Counter = 0
 
 while true do
@@ -17,7 +20,7 @@ while true do
 
     UIF.DrawText(Screen, 1,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
 
-    UIF.ProgressBar(Screen, 1,3, 50, Counter, 100, colors.green, colors.gray)
+    UIF.ProgressBar(Screen, 2,3, ScreenX-2, Counter, 100, colors.green, colors.gray)
 
     Counter = Counter + 1
     sleep(0.5)
