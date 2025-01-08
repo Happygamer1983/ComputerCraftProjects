@@ -9,7 +9,7 @@ end
 
 local DefaultTextColor = colors.white
 local DefaultBackgroundColor = colors.black
-local UIF = require("lib/UIFunctions")
+local UIF = require("UIFunctions")
 UIF.Clear(Screen)
 
 UIF.DrawText(Screen, 1,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
