@@ -5,6 +5,10 @@ local libraries = {
 }
 local TESTlibraries = {UIFunctions = "https://raw.githubusercontent.com/Happygamer1983/ComputerCraftProjects/refs/heads/main/src/CCTest.lua"}
 
+if fs.exists("lib") then
+    fs.delete("lib")
+end
+
 fs.makeDir("lib")
 
 if string.lower(args[1]) == "test" then
@@ -24,5 +28,6 @@ elseif string.lower(args[1]) == "nil" then
         libfile.write(libcode)
         libfile.close()
     end
-    require("lib/main")
+    print("Install complete, to start program type:")
+	print("'cd lib/' then 'main'")
 end
