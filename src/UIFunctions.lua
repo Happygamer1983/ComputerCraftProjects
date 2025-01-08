@@ -40,12 +40,12 @@ function UIF.DrawLine(screen, x, y, length, color)
 end
 
 function UIF.ProgressBar(screen, x, y, length, value, maxVal, bar_color, background_color)
-   local barSize = math.floor((value / maxVal) * length)
-   --print("Bar size:", barSize, "Length:", length)
+    value = math.max(0, math.min(value, maxVal))
+    local barSize = math.floor((value / maxVal) * length)
 
-   UIF.DrawLine(screen, x + barSize, y, length - barSize, background_color)
+    UIF.DrawLine(screen, x + barSize, y, length - barSize, background_color)
 
-   UIF.DrawLine(screen, x, y, barSize, bar_color)
+    UIF.DrawLine(screen, x, y, barSize, bar_color)
 end
 
 function UIF.Clear(screen)
