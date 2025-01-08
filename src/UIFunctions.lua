@@ -1,14 +1,5 @@
 local UIF = {}
 
-function UIF.DrawLine(screen, x, y, length, color)
-    if length < 0 then
-        length = 0
-      end
-      screen.setBackgroundColor(color)
-      screen.setCursorPos(x,y)
-      screen.write(string.rep(" ", length))
-end
-
 function UIF.FormatNum(number)
     number = number or 0  -- Default to 0 if nil
     local minus, int, fraction = tostring(number):match('([-]?)(%d+)([.]?%d*)')
@@ -39,12 +30,21 @@ function UIF.DrawTextMultiColor(screen, x, y, offset, text1, text2, text1_color,
 	UIF.DrawTextRight(screen, offset, y, text2, text2_color, background_color)
 end
 
-function UIF.ProgressBar(screen, x, y, length, value, maxVal, bar_color, background_color)
-   UIF.DrawLine(screen, x, y, length, background_color)
+function UIF.DrawLine(screen, x, y, length, color)
+    if length < 0 then
+        length = 0
+      end
+      screen.setBackgroundColor(color)
+      screen.setCursorPos(x,y)
+      screen.write(string.rep(" ", length))
+end
 
-   value = math.max(0, math.min(value, maxVal))
+function UIF.ProgressBar(screen, x, y, length, value, maxVal, bar_color, background_color)
    local barSize = math.floor((value / maxVal) * length)
    print("Bar size:", barSize, "Length:", length)
+
+   UIF.DrawLine(screen, x, y, length, background_color)
+
    UIF.DrawLine(screen, x, y, barSize, bar_color)
 end
 
