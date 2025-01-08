@@ -17,7 +17,7 @@ while true do
 
     UIF.DrawText(Screen, 1,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
 
-    UIF.ProgressBar(Screen, 1,3, 50, Counter, 0, 100, colors.green, colors.gray)
+    UIF.ProgressBar(Screen, 1,3, 50, Counter, 100, colors.green, colors.gray)
 
     Counter = Counter + 1
     sleep(0.5)
