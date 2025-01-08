@@ -24,5 +24,5 @@ elseif string.lower(args[1]) == "nil" then
         libfile.write(libcode)
         libfile.close()
     end
-    require("lib/main.lua")
+    require("lib/main")
 end

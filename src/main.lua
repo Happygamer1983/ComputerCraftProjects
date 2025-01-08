@@ -7,7 +7,7 @@ elseif peripheral.getType("right") == "monitor" then
     print("Monitor detected, loading program")
 end
 
-local UIF = require("lib/UIFunctions.lua")
+local UIF = require("UIFunctions")
 UIF.Clear(Screen)
 
 UIF.DrawText(Screen, 1,0, "Test Program", color.write, color.black)
