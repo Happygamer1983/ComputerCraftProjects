@@ -23,7 +23,7 @@ if string.lower(args[1]) == "test" then
         libfile.close()
         require("lib/" .. LibName)
     end
-elseif args == nil or string.lower(args[1]) == "nil" then
+else--if args == nil or string.lower(args[1]) == "nil" then
     for LibName, LibURL in pairs(libraries) do
         local lib = http.get(LibURL)
         local libcode = lib.readAll()
@@ -32,7 +32,7 @@ elseif args == nil or string.lower(args[1]) == "nil" then
         libfile.close()
     end
     local VersionFile = fs.open("VERSION", "w")
-    fs.write(http.get(VersionURL).readAll())
+    VersionFile.write(http.get(VersionURL).readAll())
     VersionFile.close()
     print("Install complete, to start program type:")
 	print("'cd lib/' then 'main'")
