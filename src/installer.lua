@@ -14,7 +14,7 @@ end
 
 fs.makeDir("lib")
 
-if args then
+if args[1] then
     if string.lower(args[1]) == "test" then
         for LibName, LibURL in pairs(TESTlibraries) do
             local lib = http.get(LibURL)
