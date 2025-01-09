@@ -36,7 +36,7 @@ while true do
 
     
 
-    Counter = math.max(0, math.min(Counter, 100))
+    Counter = math.max(0, math.min(Counter + 1, 100))
     sleep(0.5)
 end
 
