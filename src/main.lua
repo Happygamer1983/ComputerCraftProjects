@@ -17,10 +17,12 @@ local Counter = 0
 
 while true do
     UIF.Clear(Screen)
+    Screen.setTextScale(0.5)
 
     UIF.DrawText(Screen, 1,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
 
-    UIF.ProgressBar(Screen, 2,3, ScreenX-2, Counter, 100, colors.white, colors.gray)
+    UIF.DrawText(Screen, 1,3, "Test Progress: "..Counter.."%", DefaultTextColor, DefaultBackgroundColor)
+    UIF.ProgressBar(Screen, 2,4, ScreenX-2, Counter, 100, colors.white, colors.gray)
 
     Counter = Counter + 1
     sleep(0.5)
