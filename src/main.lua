@@ -2,7 +2,7 @@ local VersionURL = "https://raw.githubusercontent.com/Happygamer1983/ComputerCra
 local VersionFile = fs.open("VERSION", "r")
 print("Loading program...")
 
-assert(http.get(VersionURL).readAll() == VersionFile.readAll(), "Outdated version")
+assert(http.get(VersionURL).readAll() == VersionFile.readAll(), "Outdated version, please delete lib/ folder and run install.lua again")
 assert(peripheral.getType("right") == "monitor", "No Monitor detected on the right side!")
 -- More checks
 
@@ -16,6 +16,7 @@ local ScreenX, ScreenY = Screen.getSize()
 local DefaultTextColor = colors.white
 local DefaultBackgroundColor = colors.black
 
+local Counter = 0
 
 while true do
     UIF.Clear(Screen)

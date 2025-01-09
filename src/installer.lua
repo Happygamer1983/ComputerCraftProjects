@@ -14,16 +14,18 @@ end
 
 fs.makeDir("lib")
 
-if string.lower(args[1]) == "test" then
-    for LibName, LibURL in pairs(TESTlibraries) do
-        local lib = http.get(LibURL)
-        local libcode = lib.readAll()
-        local libfile = fs.open("lib/" .. LibName, "w")
-        libfile.write(libcode)
-        libfile.close()
-        require("lib/" .. LibName)
+if args then
+    if string.lower(args[1]) == "test" then
+        for LibName, LibURL in pairs(TESTlibraries) do
+            local lib = http.get(LibURL)
+            local libcode = lib.readAll()
+            local libfile = fs.open("lib/" .. LibName, "w")
+            libfile.write(libcode)
+            libfile.close()
+            require("lib/" .. LibName)
+        end
     end
-else--if args == nil or string.lower(args[1]) == "nil" then
+else
     for LibName, LibURL in pairs(libraries) do
         local lib = http.get(LibURL)
         local libcode = lib.readAll()
