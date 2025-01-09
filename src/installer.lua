@@ -1,4 +1,7 @@
-local args = {...} or {}
+local args = {...}
+
+local VersionURL = "https://raw.githubusercontent.com/Happygamer1983/ComputerCraftProjects/refs/heads/main/src/VERSION"
+
 local libraries = {
     main = "https://raw.githubusercontent.com/Happygamer1983/ComputerCraftProjects/refs/heads/main/src/main.lua",
     UIFunctions = "https://raw.githubusercontent.com/Happygamer1983/ComputerCraftProjects/refs/heads/main/src/UIFunctions.lua"
@@ -20,7 +23,7 @@ if string.lower(args[1]) == "test" then
         libfile.close()
         require("lib/" .. LibName)
     end
-elseif string.lower(args[1]) == "nil" then
+elseif args == nil or string.lower(args[1]) == "nil" then
     for LibName, LibURL in pairs(libraries) do
         local lib = http.get(LibURL)
         local libcode = lib.readAll()
@@ -28,6 +31,9 @@ elseif string.lower(args[1]) == "nil" then
         libfile.write(libcode)
         libfile.close()
     end
+    local VersionFile = fs.open("VERSION", "w")
+    fs.write(http.get(VersionURL).readAll())
+    VersionFile.close()
     print("Install complete, to start program type:")
 	print("'cd lib/' then 'main'")
 end
