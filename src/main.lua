@@ -3,7 +3,8 @@ local VersionFile = fs.open("VERSION", "r")
 print("Loading program...")
 
 assert(http.get(VersionURL).readAll() == VersionFile.readAll(), "Outdated version, please run install.lua again")
-assert(peripheral.getType("right") == "monitor", "No Monitor detected on the right side!")
+assert(peripheral.getType("right") == "monitor", "No Monitor!")
+assert(peripheral.getType("left") == "info_panel_advanced", "No Reactor Info!")
 -- More checks
 
 print("Done!")
@@ -19,7 +20,28 @@ local DefaultBackgroundColor = colors.black
 local BarColor = colors.green
 local BackBarColor = colors.gray
 
-local Counter = 0
+local GetReactorCardData = function(CardData)
+    local sortedTables = {}
+    local cardSize = 6 -- Number of entries per card
+
+    for i = 1, #CardData, cardSize do
+        local cardData = {}
+
+        -- Check if the card contains "Out of Range"
+        if cardTable[i] == "Out of Range" then
+            table.insert(cardData, "Out of Range")
+        else
+            for j = 0, cardSize - 1 do
+                local value = cardTable[i + j]
+                table.insert(cardData, value)
+            end
+        end
+
+        table.insert(sortedTables, cardData)
+    end
+
+    return sortedTables
+end
 
 while true do
     UIF.Clear(Screen)
@@ -27,11 +49,13 @@ while true do
 
     UIF.DrawText(Screen, 2,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
 
-    if Counter < 100 then
-        UIF.DrawText(Screen, 2,3, "Test Progress: "..Counter.."%", DefaultTextColor, DefaultBackgroundColor)
-        UIF.ProgressBar(Screen, 2,4, ScreenX-2, Counter, 100, BarColor, BackBarColor)
-    else
-        UIF.DrawText(Screen, 2,3, "Test Done!", DefaultTextColor, DefaultBackgroundColor)
+    local Retruned, DataError = pcall(function()
+        return peripheral.wrap("left").getCardData()
+    end)
+
+    if DataError then
+        UIF.DrawText(Screen, 2,1, DataError, colors.red, DefaultBackgroundColor)
+        break
     end
 
     
