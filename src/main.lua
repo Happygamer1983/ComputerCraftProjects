@@ -81,22 +81,21 @@ while true do
 
     for i,v in pairs(Retruned) do
         if v[1] == "Out of Range" then
-            UIF.DrawText(Mon, 2,1, "Out of Range", colors.red, DefaultBackgroundColor)
+            UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
             return
-        elseif ConvertNumber(v[1]) < 2000 then
-            TempColor = colors.green
-            TempBarColor = colors.green
-        elseif ConvertNumber(v[1]) >= 2000 then
-            TempColor = colors.lime
-        elseif ConvertNumber(v[1]) >= 4000 then
-            print("Test")
-            TempColor = colors.yellow
-        elseif ConvertNumber(v[1]) >= 6500 then
-            TempColor = colors.orange
-            TempBarColor = colors.orange
         elseif ConvertNumber(v[1]) >= 7500 then
             TempColor = colors.red
             TempBarColor = colors.red
+        elseif ConvertNumber(v[1]) >= 6500 then
+            TempColor = colors.orange
+            TempBarColor = colors.orange
+        elseif ConvertNumber(v[1]) >= 4000 then
+            TempColor = colors.yellow
+        elseif ConvertNumber(v[1]) >= 2000 then
+            TempColor = colors.lime
+        else
+            TempColor = colors.green
+            TempBarColor = colors.green
         end
 
         if v[2] == "Off" then
