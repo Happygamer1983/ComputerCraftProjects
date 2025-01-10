@@ -110,8 +110,8 @@ while true do
         UIF.DrawTextLeftRight(Mon, 2, 3, 1, "Reactor Temperature ", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
         UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
 
-        UIF.DrawTextLeftRight(Mon, 2, 3, 1, "Reactor Energy Output ", v[5].." EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
-        UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[5]), colors.green, colors.gray)
+        UIF.DrawTextLeftRight(Mon, 2, 3, 1, "Reactor Energy Output ", v[5].." / 6 960 EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
+        UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
     end
     sleep(0.1)
 end
