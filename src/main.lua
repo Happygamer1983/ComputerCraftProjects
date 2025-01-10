@@ -17,6 +17,10 @@ local ScreenX, ScreenY = Screen.getSize()
 local DefaultTextColor = colors.white
 local DefaultBackgroundColor = colors.black
 
+local StatusColor
+local TempColor
+local RemainingColor
+
 local BarColor = colors.green
 local BackBarColor = colors.gray
 
@@ -49,13 +53,23 @@ while true do
 
     UIF.DrawText(Screen, 2,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
 
-    local Retruned, DataError = pcall(function()
-        return peripheral.wrap("left").getCardData()
+    local Success, Retruned = pcall(function()
+        return GetReactorCardData(peripheral.wrap("left").getCardData())
     end)
 
-    if DataError then
-        UIF.DrawText(Screen, 2,1, DataError, colors.red, DefaultBackgroundColor)
+    if not Success then
+        UIF.DrawText(Screen, 2,1, Retruned, colors.red, DefaultBackgroundColor)
         break
+    end
+
+    for i,v in pairs(Retruned) do
+        if v[2] == "Off" then
+            StatusColor = colors.red
+        else
+            StatusColor = colors.lime
+        end
+
+        UIF.DrawTextLeftRight(Screen, 2,1,1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor)
     end
 
     

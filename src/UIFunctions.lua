@@ -25,7 +25,7 @@ function UIF.DrawTextRight(screen, x, y, text, text_color, background_color)
     screen.write(text)
 end
 
-function UIF.DrawTextMultiColor(screen, x, y, offset, text1, text2, text1_color, text2_color, background_color)
+function UIF.DrawTextLeftRight(screen, x, y, offset, text1, text2, text1_color, text2_color, background_color)
     UIF.DrawText(screen, x, y, text1, text1_color, background_color)
 	UIF.DrawTextRight(screen, offset, y, text2, text2_color, background_color)
 end
