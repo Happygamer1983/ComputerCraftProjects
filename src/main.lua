@@ -53,11 +53,11 @@ local GetReactorCardData = function(CardData)
     return sortedTables
 end
 
-local StartReactor = function()
+local StartReactor = function(event, x, y)
     rs.setBundledOutput("back", colors.black)
 end
 
-local ShutdownReactor = function()
+local ShutdownReactor = function(event, x, y)
     rs.setBundledOutput("back", 0)
 end
 
