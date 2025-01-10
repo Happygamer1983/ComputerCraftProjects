@@ -32,11 +32,11 @@ local GetReactorCardData = function(CardData)
         local cardData = {}
 
         -- Check if the card contains "Out of Range"
-        if cardTable[i] == "Out of Range" then
+        if CardData[i] == "Out of Range" then
             table.insert(cardData, "Out of Range")
         else
             for j = 0, cardSize - 1 do
-                local value = cardTable[i + j]
+                local value = CardData[i + j]
                 table.insert(cardData, value)
             end
         end
