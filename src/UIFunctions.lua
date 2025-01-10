@@ -48,6 +48,14 @@ function UIF.ProgressBar(Mon, x, y, length, value, maxVal, bar_color, background
     UIF.DrawLine(Mon, x, y, barSize, bar_color)
 end
 
+function UIF.NewButton(Mon, x, y, width, height, text, text_color, button_color, callback)
+    for i = 0, height, 1 do 
+        UIF.DrawLine(Mon, x, y + i, width, button_color)
+    end
+    local event, side, x, y = os.pullEvent("monitor_touch")
+    print("The monitor on side " .. side .. " was touched at (" .. x .. ", " .. y .. ")")
+end
+
 function UIF.Clear(Mon)
     term.clear()
     term.setCursorPos(1,1)

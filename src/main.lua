@@ -22,7 +22,9 @@ local TempColor = colors.green
 local TempBarColor = colors.green
 local RemainingColor = colors.green
 
+shell.run("wget https://raw.githubusercontent.com/lyqyd/Touchpoint/refs/heads/master/touchpoint")
 local UIF = require("UIFunctions")
+local TouchPoint = require("touchpoint")
 
 local ConvertNumber = function(str)
     local cleanedStr = string.gsub(str, "%s", "")
@@ -114,6 +116,8 @@ while true do
         UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
 
         UIF.DrawTextLeftRight(Mon, 2, 9, 1, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
+
+        UIF.NewButton(Mon, 2, 13, 10, 2, "Button", colors.white, colors.gray)
         
     end
     sleep(0.1)
