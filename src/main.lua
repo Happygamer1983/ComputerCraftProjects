@@ -19,12 +19,16 @@ local DefaultBackgroundColor = colors.black
 
 local StatusColor
 local TempColor
+local TempBarColor
 local RemainingColor
 
-local BarColor = colors.green
-local BackBarColor = colors.gray
-
 local UIF = require("UIFunctions")
+
+local ConvertNumber = function(str)
+    local cleanedStr = string.gsub(str, "%s", "")
+    local number = tonumber(cleanedStr)
+    return number
+end
 
 local GetReactorCardData = function(CardData)
     local sortedTables = {}
@@ -59,20 +63,52 @@ while true do
         return GetReactorCardData(peripheral.wrap("left").getCardData())
     end)
 
+    --[[
+    CardInfo = {
+    [1] = temp          (number)
+    [2] = on/off        (string)
+    [3] = max heat      (number)
+    [4] = meltdown temp (number)
+    [5] = EU/t output   (number)
+    [6] = remaining     (string)
+    }
+    ]]
+
     if not Success then
         UIF.DrawText(Mon, 2,1, Retruned, colors.red, DefaultBackgroundColor)
         break
     end
 
     for i,v in pairs(Retruned) do
+        if v[1] == "Out of Range" then
+            UIF.DrawText(Mon, 2,1, "Out of Range", colors.red, DefaultBackgroundColor)
+            return
+        elseif ConvertNumber(v[1]) < 2000 then
+            TempColor = colors.green
+            TempBarColor = colors.green
+        elseif ConvertNumber(v[1]) >= 2000 then
+            TempColor = colors.lime
+        elseif ConvertNumber(v[1]) >= 4000 then
+            TempColor = colors.yellow
+        elseif ConvertNumber(v[1]) >= 6500 then
+            TempColor = colors.orange
+            TempBarColor = colors.orange
+        elseif ConvertNumber(v[1]) >= 7500 then
+            TempColor = colors.red
+            TempBarColor = colors.red
+        end
+
         if v[2] == "Off" then
             StatusColor = colors.red
         else
             StatusColor = colors.lime
         end
 
-        UIF.DrawTextLeftRight(Mon, 2,1,1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
+        UIF.DrawTextLeftRight(Mon, 2, 1, 1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
+
+        UIF.DrawTextLeftRight(Mon, 2, 3, 1, "Reactor Temperature ", v[1], DefaultTextColor, TempColor, DefaultBackgroundColor)
+        UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
     end
-    sleep(0.5)
+    sleep(0.1)
 end
 

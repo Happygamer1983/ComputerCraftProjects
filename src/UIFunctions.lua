@@ -21,7 +21,7 @@ end
 function UIF.DrawTextRight(Mon, x, y, text, text_color, background_color)
     Mon.screen.setBackgroundColor(background_color)
     Mon.screen.setTextColor(text_color)
-    Mon.screen.setCursorPos(Mon.X-string.len(tostring(text))-offset,y)
+    Mon.screen.setCursorPos(Mon.X-string.len(tostring(text))-x,y)
     Mon.screen.write(text)
 end
 
