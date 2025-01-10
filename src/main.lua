@@ -22,9 +22,7 @@ local TempColor = colors.green
 local TempBarColor = colors.green
 local RemainingColor = colors.green
 
-shell.run("wget https://raw.githubusercontent.com/lyqyd/Touchpoint/refs/heads/master/touchpoint")
 local UIF = require("UIFunctions")
-local TouchPoint = require("touchpoint")
 
 local ConvertNumber = function(str)
     local cleanedStr = string.gsub(str, "%s", "")

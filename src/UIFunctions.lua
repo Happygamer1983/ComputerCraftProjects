@@ -53,7 +53,7 @@ function UIF.NewButton(Mon, x, y, width, height, text, text_color, button_color,
         UIF.DrawLine(Mon, x, y + i, width, button_color)
     end
     local event, side, x, y = os.pullEvent("monitor_touch")
-    print("The monitor on side " .. side .. " was touched at (" .. x .. ", " .. y .. ")")
+    UIF.DrawText(Mon, 2, 20, "The monitor on side " .. side .. " was touched at (" .. x .. ", " .. y .. ")", colors.white, colors.black)
 end
 
 function UIF.Clear(Mon)
