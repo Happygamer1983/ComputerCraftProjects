@@ -71,10 +71,6 @@ while true do
 
         UIF.DrawTextLeftRight(Screen, 2,1,1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
     end
-
-    
-
-    Counter = math.max(0, math.min(Counter + 1, 100))
     sleep(0.5)
 end
 
