@@ -17,10 +17,10 @@ Mon.screen, Mon.X, Mon.Y = Screen, ScreenX, ScreenY
 local DefaultTextColor = colors.white
 local DefaultBackgroundColor = colors.black
 
-local StatusColor
-local TempColor
-local TempBarColor
-local RemainingColor
+local StatusColor = colors.red
+local TempColor = colors.green
+local TempBarColor = colors.green
+local RemainingColor = colors.green
 
 local UIF = require("UIFunctions")
 
@@ -89,6 +89,7 @@ while true do
         elseif ConvertNumber(v[1]) >= 2000 then
             TempColor = colors.lime
         elseif ConvertNumber(v[1]) >= 4000 then
+            print("Test")
             TempColor = colors.yellow
         elseif ConvertNumber(v[1]) >= 6500 then
             TempColor = colors.orange
@@ -104,6 +105,7 @@ while true do
             StatusColor = colors.lime
         end
 
+        print(TempColor)
         UIF.DrawTextLeftRight(Mon, 2, 1, 1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
 
         UIF.DrawTextLeftRight(Mon, 2, 3, 1, "Reactor Temperature ", v[1], DefaultTextColor, TempColor, DefaultBackgroundColor)
