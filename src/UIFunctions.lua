@@ -56,8 +56,7 @@ function UIF.NewButton(Mon, x, y, height, text, text_color, button_color, callba
 
     local event, side, touchX, touchY = os.pullEvent("monitor_touch")
     if touchX >= x and touchX < x + string.len(text) + 2 and touchY >= y and touchY < y + height then
-        error("Button clicked at: " .. touchX .. ", " .. touchY)
-        --callback(event, x, y)
+        callback(event, x, y)
     end
 end
 
