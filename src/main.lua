@@ -11,8 +11,9 @@ print("Done!")
 
 local UIF = require("UIFunctions")
 
-local Screen = peripheral.wrap("right")
-local ScreenX, ScreenY = Screen.getSize()
+local Mon = {}
+Mon.screen = peripheral.wrap("right")
+Mon.X, Mon.Y = Mon.screen.getSize()
 
 local DefaultTextColor = colors.white
 local DefaultBackgroundColor = colors.black
@@ -48,17 +49,17 @@ local GetReactorCardData = function(CardData)
 end
 
 while true do
-    UIF.Clear(Screen)
-    Screen.setTextScale(1)
+    UIF.Clear(Mon)
+    Mon.screen.setTextScale(1)
 
-    UIF.DrawText(Screen, 2,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
+    UIF.DrawText(Mon, 2,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
 
     local Success, Retruned = pcall(function()
         return GetReactorCardData(peripheral.wrap("left").getCardData())
     end)
 
     if not Success then
-        UIF.DrawText(Screen, 2,1, Retruned, colors.red, DefaultBackgroundColor)
+        UIF.DrawText(Mon, 2,1, Retruned, colors.red, DefaultBackgroundColor)
         break
     end
 
@@ -69,7 +70,7 @@ while true do
             StatusColor = colors.lime
         end
 
-        UIF.DrawTextLeftRight(Screen, 2,1,1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
+        UIF.DrawTextLeftRight(Mon, 2,1,1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
     end
     sleep(0.5)
 end

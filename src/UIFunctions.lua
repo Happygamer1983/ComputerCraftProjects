@@ -11,49 +11,49 @@ function UIF.FormatNum(number)
     return minus .. int .. fraction
 end
 
-function UIF.DrawText(screen, x, y, text, text_color, background_color)
-    screen.setBackgroundColor(background_color)
-    screen.setTextColor(text_color)
-    screen.setCursorPos(x,y)
-    screen.write(text)
+function UIF.DrawText(Mon, x, y, text, text_color, background_color)
+    Mon.screen.setBackgroundColor(background_color)
+    Mon.screen.setTextColor(text_color)
+    Mon.screen.setCursorPos(x,y)
+    Mon.screen.write(text)
 end
 
-function UIF.DrawTextRight(screen, x, y, text, text_color, background_color)
-    screen.setBackgroundColor(background_color)
-    screen.setTextColor(text_color)
-    screen.setCursorPos(mon.X-string.len(tostring(text))-offset,y)
-    screen.write(text)
+function UIF.DrawTextRight(Mon, x, y, text, text_color, background_color)
+    Mon.screen.setBackgroundColor(background_color)
+    Mon.screen.setTextColor(text_color)
+    Mon.screen.setCursorPos(Mon.X-string.len(tostring(text))-offset,y)
+    Mon.screen.write(text)
 end
 
-function UIF.DrawTextLeftRight(screen, x, y, offset, text1, text2, text1_color, text2_color, background_color)
-    UIF.DrawText(screen, x, y, text1, text1_color, background_color)
-	UIF.DrawTextRight(screen, offset, y, text2, text2_color, background_color)
+function UIF.DrawTextLeftRight(Mon, x, y, offset, text1, text2, text1_color, text2_color, background_color)
+    UIF.DrawText(Mon.screen, x, y, text1, text1_color, background_color)
+	UIF.DrawTextRight(Mon.screen, offset, y, text2, text2_color, background_color)
 end
 
-function UIF.DrawLine(screen, x, y, length, color)
+function UIF.DrawLine(Mon, x, y, length, color)
     if length < 0 then
         length = 0
       end
-      screen.setBackgroundColor(color)
-      screen.setCursorPos(x,y)
-      screen.write(string.rep(" ", length))
+      Mon.screen.setBackgroundColor(color)
+      Mon.screen.setCursorPos(x,y)
+      Mon.screen.write(string.rep(" ", length))
 end
 
-function UIF.ProgressBar(screen, x, y, length, value, maxVal, bar_color, background_color)
+function UIF.ProgressBar(Mon, x, y, length, value, maxVal, bar_color, background_color)
     value = math.max(0, math.min(value, maxVal))
     local barSize = math.floor((value / maxVal) * length)
 
-    UIF.DrawLine(screen, x + barSize, y, length - barSize, background_color)
+    UIF.DrawLine(Mon.screen, x + barSize, y, length - barSize, background_color)
 
-    UIF.DrawLine(screen, x, y, barSize, bar_color)
+    UIF.DrawLine(Mon.screen, x, y, barSize, bar_color)
 end
 
-function UIF.Clear(screen)
+function UIF.Clear(Mon)
     term.clear()
     term.setCursorPos(1,1)
-    screen.setBackgroundColor(colors.black)
-    screen.clear()
-    screen.setCursorPos(1,1)
+    Mon.screen.setBackgroundColor(colors.black)
+    Mon.screen.clear()
+    Mon.screen.setCursorPos(1,1)
 end
 
 return UIF
