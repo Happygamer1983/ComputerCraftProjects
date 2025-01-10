@@ -10,7 +10,7 @@ assert(peripheral.getType("left") == "info_panel_advanced", "No Reactor Info!")
 print("Done!")
 
 local Screen = peripheral.wrap("right")
-local ScreenX, ScreenY = Mon.screen.getSize()
+local ScreenX, ScreenY = Screen.getSize()
 local Mon = {}
 Mon.screen, Mon.X, Mon.Y = Screen, ScreenX, ScreenY
 
