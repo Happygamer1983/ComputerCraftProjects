@@ -115,7 +115,7 @@ while true do
 
         UIF.DrawTextLeftRight(Mon, 2, 9, 1, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
 
-        UIF.NewButton(Mon, 2, 13, 10, 2, "Button", colors.white, colors.gray)
+        UIF.NewButton(Mon, 2, 13, 2, "Button", colors.white, colors.gray)
         
     end
     sleep(0.1)

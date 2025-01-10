@@ -48,12 +48,13 @@ function UIF.ProgressBar(Mon, x, y, length, value, maxVal, bar_color, background
     UIF.DrawLine(Mon, x, y, barSize, bar_color)
 end
 
-function UIF.NewButton(Mon, x, y, width, height, text, text_color, button_color, callback)
+function UIF.NewButton(Mon, x, y, height, text, text_color, button_color, callback)
     for i = 0, height, 1 do 
-        UIF.DrawLine(Mon, x, y + i, width, button_color)
+        UIF.DrawLine(Mon, x, y + i, string.len(text) + 2, button_color)
     end
+    UIF.DrawText(Mon, x + 1, y + height / 2, text, text_color, button_color)
     local event, side, x, y = os.pullEvent("monitor_touch")
-    UIF.DrawText(Mon, 2, 20, "The monitor on side " .. side .. " was touched at (" .. x .. ", " .. y .. ")", colors.white, colors.black)
+    callback(event, x, y)
 end
 
 function UIF.Clear(Mon)
