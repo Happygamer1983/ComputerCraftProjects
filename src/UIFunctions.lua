@@ -53,8 +53,11 @@ function UIF.NewButton(Mon, x, y, height, text, text_color, button_color, callba
         UIF.DrawLine(Mon, x, y + i, string.len(text) + 2, button_color)
     end
     UIF.DrawText(Mon, x + 1, y + height / 2, text, text_color, button_color)
-    local event, side, x, y = os.pullEvent("monitor_touch")
-    callback(event, x, y)
+
+    coroutine.wrap(function()
+        local event, side, x, y = os.pullEvent("monitor_touch")
+        callback(event, x, y)
+    end)()
 end
 
 function UIF.Clear(Mon)
