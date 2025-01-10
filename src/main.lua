@@ -9,8 +9,6 @@ assert(peripheral.getType("left") == "info_panel_advanced", "No Reactor Info!")
 
 print("Done!")
 
-local UIF = require("UIFunctions")
-
 local Mon = {}
 Mon.screen = peripheral.wrap("right")
 Mon.X, Mon.Y = Mon.screen.getSize()
@@ -24,6 +22,8 @@ local RemainingColor
 
 local BarColor = colors.green
 local BackBarColor = colors.gray
+
+
 
 local GetReactorCardData = function(CardData)
     local sortedTables = {}
@@ -48,11 +48,15 @@ local GetReactorCardData = function(CardData)
     return sortedTables
 end
 
+
+
+local UIF = require("UIFunctions")
+
 while true do
     UIF.Clear(Mon)
     Mon.screen.setTextScale(1)
 
-    UIF.DrawText(Mon, 2,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
+    UIF.DrawText(Mon, 2,1, "Test Program", DefaultTextColor, DefaultBackgroundColor) -- thows an error: UIFunctions:15: attempt to index field 'screen' (a nil value)
 
     local Success, Retruned = pcall(function()
         return GetReactorCardData(peripheral.wrap("left").getCardData())
