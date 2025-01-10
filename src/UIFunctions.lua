@@ -55,11 +55,10 @@ function UIF.NewButton(Mon, x, y, height, text, text_color, button_color, callba
     UIF.DrawText(Mon, x + 1, y + height / 2, text, text_color, button_color)
 
     local event, side, touchX, touchY = os.pullEvent("monitor_touch")
-    coroutine.resume(coroutine.create(function()
-        if touchX >= x and touchX < x + string.len(text) + 2 and touchY >= y and touchY < y + height then
-            callback(event, x, y)
-        end
-    end))
+    if touchX >= x and touchX < x + string.len(text) + 2 and touchY >= y and touchY < y + height then
+        error("Button clicked at: " .. touchX .. ", " .. touchY)
+        --callback(event, x, y)
+    end
 end
 
 function UIF.Clear(Mon)
