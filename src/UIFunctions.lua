@@ -26,8 +26,8 @@ function UIF.DrawTextRight(Mon, x, y, text, text_color, background_color)
 end
 
 function UIF.DrawTextLeftRight(Mon, x, y, offset, text1, text2, text1_color, text2_color, background_color)
-    UIF.DrawText(Mon.screen, x, y, text1, text1_color, background_color)
-	UIF.DrawTextRight(Mon.screen, offset, y, text2, text2_color, background_color)
+    UIF.DrawText(Mon, x, y, text1, text1_color, background_color)
+	UIF.DrawTextRight(Mon, offset, y, text2, text2_color, background_color)
 end
 
 function UIF.DrawLine(Mon, x, y, length, color)

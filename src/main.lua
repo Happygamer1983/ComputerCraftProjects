@@ -49,7 +49,7 @@ local GetReactorCardData = function(CardData)
     return sortedTables
 end
 
-while true and Mon.screen do
+while true do
     UIF.Clear(Mon)
     Mon.screen.setTextScale(1)
 
