@@ -122,13 +122,9 @@ while true do
 
         UIF.DrawTextLeftRight(Mon, 2, 9, 1, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
 
-        coroutine.wrap(function()
-            UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
-        end)()
+        coroutine.wrap(UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor))()
 
-        coroutine.wrap(function()
-            UIF.NewButton(Mon, 2, 17, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
-        end)()
+        coroutine.wrap(UIF.NewButton(Mon, 2, 17, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor))()
 
     end
     sleep(0.1)
