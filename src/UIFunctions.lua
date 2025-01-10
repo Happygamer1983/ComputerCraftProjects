@@ -49,12 +49,12 @@ function UIF.ProgressBar(Mon, x, y, length, value, maxVal, bar_color, background
 end
 
 function UIF.NewButton(Mon, x, y, height, text, text_color, button_color, callback)
-    for i = 0, height, 1 do 
-        UIF.DrawLine(Mon, x, y + i, string.len(text) + 2, button_color)
-    end
-    UIF.DrawText(Mon, x + 1, y + height / 2, text, text_color, button_color)
-
     coroutine.wrap(function()
+        for i = 0, height, 1 do 
+            UIF.DrawLine(Mon, x, y + i, string.len(text) + 2, button_color)
+        end
+        UIF.DrawText(Mon, x + 1, y + height / 2, text, text_color, button_color)
+
         local event, side, x, y = os.pullEvent("monitor_touch")
         callback(event, x, y)
     end)()

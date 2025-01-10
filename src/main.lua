@@ -119,7 +119,7 @@ while true do
             rs.setBundledOutput("back", colors.black)
         end)
 
-        UIF.NewButton(Mon, 15, 12, 2, "Shutdown", colors.white, colors.gray, function(event, x, y)
+        UIF.NewButton(Mon, 2, 15, 2, "Shutdown", colors.white, colors.gray, function(event, x, y)
             rs.setBundledOutput("back", 0)
         end)
         
