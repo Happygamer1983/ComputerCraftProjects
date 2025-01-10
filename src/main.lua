@@ -115,8 +115,12 @@ while true do
 
         UIF.DrawTextLeftRight(Mon, 2, 9, 1, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
 
-        UIF.NewButton(Mon, 2, 13, 2, "Turn On", colors.white, colors.gray, function(event, x, y)
-            rs.setBundledOutput("back", "black")
+        UIF.NewButton(Mon, 2, 12, 2, "Turn Reactor On", colors.white, colors.gray, function(event, x, y)
+            rs.setBundledOutput("back", colors.black)
+        end)
+
+        UIF.NewButton(Mon, 15, 12, 2, "Shutdown", colors.white, colors.gray, function(event, x, y)
+            rs.setBundledOutput("back", 0)
         end)
         
     end
