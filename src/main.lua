@@ -112,7 +112,6 @@ while true do
             StatusColor = colors.lime
         end
 
-        print(TempColor)
         UIF.DrawTextLeftRight(Mon, 2, 1, 1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
 
         UIF.DrawTextLeftRight(Mon, 2, 3, 1, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
