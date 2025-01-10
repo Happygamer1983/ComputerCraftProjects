@@ -43,9 +43,9 @@ function UIF.ProgressBar(Mon, x, y, length, value, maxVal, bar_color, background
     value = math.max(0, math.min(value, maxVal))
     local barSize = math.floor((value / maxVal) * length)
 
-    UIF.DrawLine(Mon.screen, x + barSize, y, length - barSize, background_color)
+    UIF.DrawLine(Mon, x + barSize, y, length - barSize, background_color)
 
-    UIF.DrawLine(Mon.screen, x, y, barSize, bar_color)
+    UIF.DrawLine(Mon, x, y, barSize, bar_color)
 end
 
 function UIF.Clear(Mon)
