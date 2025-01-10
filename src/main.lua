@@ -53,6 +53,14 @@ local GetReactorCardData = function(CardData)
     return sortedTables
 end
 
+local StartReactor = function()
+    rs.setBundledOutput("back", colors.black)
+end
+
+local ShutdownReactor = function()
+    rs.setBundledOutput("back", 0)
+end
+
 while true do
     UIF.Clear(Mon)
     Mon.screen.setTextScale(1)
@@ -115,13 +123,9 @@ while true do
 
         UIF.DrawTextLeftRight(Mon, 2, 9, 1, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
 
-        UIF.NewButton(Mon, 2, 12, 2, "Turn Reactor On", colors.white, colors.gray, function(event, x, y)
-            rs.setBundledOutput("back", colors.black)
-        end)
+        UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
 
-        UIF.NewButton(Mon, 2, 15, 2, "Shutdown", colors.white, colors.gray, function(event, x, y)
-            rs.setBundledOutput("back", 0)
-        end)
+        UIF.NewButton(Mon, 17, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
         
     end
     sleep(0.1)
