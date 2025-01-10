@@ -69,7 +69,7 @@ while true do
             StatusColor = colors.lime
         end
 
-        UIF.DrawTextLeftRight(Screen, 2,1,1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor)
+        UIF.DrawTextLeftRight(Screen, 2,1,1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
     end
 
     
