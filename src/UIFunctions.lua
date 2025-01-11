@@ -2,9 +2,8 @@ local UIF = {}
 local Buttons = {}
 
 local ButtonUpdate = function()
+    local event, side, touchX, touchY = os.pullEvent("monitor_touch")
     for i,v in pairs(Buttons) do
-        local event, side, touchX, touchY = os.pullEvent("monitor_touch") -- Move into own seperate function
-
         if touchX >= v.x and touchX < v.x + string.len(v.text) + 2 and touchY >= v.y and touchY < v.y + height then
             v.callback(event, x, y)   
         end  
