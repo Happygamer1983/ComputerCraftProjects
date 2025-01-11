@@ -8,16 +8,19 @@ local Event = function()
     end
 end
 
+local IsWithinField = function(x,y,start_x,start_y,width,height)
+    return x >= start_x and x < start_x+width and y >= start_y and y < start_y+height
+end
+
 local ButtonUpdate = function()
-    while true do
-        print("Button pressed")
-        for i,v in pairs(Buttons) do
-            if touchX >= v.x and touchX < v.x + string.len(v.text) + 2 and touchY >= v.y and touchY < v.y + height then
-                v.callback(event, x, y)  
-                touchX, touchY = nil, nil
-            end  
-        end
-    end  
+    print("Button pressed")
+    for i,v in pairs(Buttons) do
+        print(i)
+        if IsWithinField(touchX, touchY, v.x, v.y, string.len(v.text) + 2, v.height) then
+            v.callback(event, x, y)  
+            touchX, touchY = nil, nil
+        end  
+    end 
 end
 
 function UIF.FormatNum(number)
