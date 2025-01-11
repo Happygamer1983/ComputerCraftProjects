@@ -1,14 +1,23 @@
 local UIF = {}
 local Buttons = {}
+local touchX, touchY = {}
+
+local Event = function()
+    while true do
+        _, _, touchX, touchY = os.pullEvent("monitor_touch") 
+    end
+end
 
 local ButtonUpdate = function()
-    local event, side, touchX, touchY = os.pullEvent("monitor_touch")
     for i,v in pairs(Buttons) do
         if touchX >= v.x and touchX < v.x + string.len(v.text) + 2 and touchY >= v.y and touchY < v.y + height then
-            UIF.DrawText(Mon, 2,1, "TEST TEST TEST", colors.red, DefaultBackgroundColor)
             v.callback(event, x, y)   
         end  
     end
+    --for i,v in pairs(Callback) do
+    --    v()
+    --    table.remove(Callback, i)
+    --end
 end
 
 function UIF.FormatNum(number)
@@ -85,10 +94,10 @@ function UIF.Clear(Mon)
     Mon.screen.setCursorPos(1,1)
 end
 
-coroutine.wrap(function()
-    while true do
-        ButtonUpdate()
-    end
-end)()
+parallel.waitForAny(Event, ButtonUpdate)
+
+--coroutine.wrap(function()
+    --Event()
+--end)()
 
 return UIF
