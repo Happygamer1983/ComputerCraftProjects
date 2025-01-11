@@ -25,6 +25,7 @@ local RemainingColor = colors.green
 local ReactorCardData
 
 local UIF = require("UIFunctions")
+local Taskmaster = require("taskmaster")()
 
 local ConvertNumber = function(str)
     local cleanedStr = string.gsub(str, "%s", "")
@@ -60,6 +61,10 @@ local GetReactorCardData = function(CardData)
     end
 
     ReactorCardData = sortedTables
+end
+
+local HandleMonitorTouch = function(event, button, touchX, touchY)
+    print("Touched")
 end
 
 local StartReactor = function(event, x, y)
@@ -139,6 +144,7 @@ local Update = function()
             DrawDynamicUI(i, v)
         end
     end
+    Taskmaster:eventListener("monitor_touch",HandleMonitorTouch):run()
 end
 
 while true do

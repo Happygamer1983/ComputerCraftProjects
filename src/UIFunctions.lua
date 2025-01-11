@@ -7,6 +7,7 @@ local IsWithinField = function(x,y,start_x,start_y,width,height)
 end
 
 local Event = function()
+    --[[
     while true do
         local _, _, touchX, touchY = os.pullEvent("monitor_touch") 
         print("Input")
@@ -16,13 +17,8 @@ local Event = function()
             end  
         end 
     end
-    
+    ]]
 end
-
-local ButtonUpdate = function()
-end
-
-parallel.waitForAny(Event, ButtonUpdate)
 
 function UIF.FormatNum(number)
     number = number or 0  -- Default to 0 if nil
@@ -79,15 +75,20 @@ function UIF.NewButton(Mon, x, y, height, text, text_color, button_color, callba
     UIF.DrawText(Mon, x + 1, y + height / 2, text, text_color, button_color)
 
     table.insert(Buttons, {
-        Mon = Mon,
         x = x,
         y = y,
         height = height,
         text = text,
-        text_color = text_color,
-        button_color = button_color,
         callback = callback
     })
+
+    return {
+        x = x,
+        y = y,
+        height = height,
+        text = text,
+        callback = callback
+    }
 end
 
 function UIF.Clear(Mon)
