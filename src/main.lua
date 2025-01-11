@@ -63,10 +63,6 @@ local GetReactorCardData = function(CardData)
     ReactorCardData = sortedTables
 end
 
-local HandleMonitorTouch = function(event, button, touchX, touchY)
-    print("Touched")
-end
-
 local StartReactor = function(event, x, y)
     rs.setBundledOutput("back", colors.black)
 end
@@ -96,6 +92,9 @@ local DrawDynamicUI = function(i, v)
     UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
 
     UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
+
+    UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
+    UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
 end
 
 local Init = function()
@@ -105,9 +104,6 @@ local Init = function()
 
     for i,v in pairs(ReactorCardData) do
         DrawDynamicUI(i, v)
-
-        UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
-        UIF.NewButton(Mon, 2, 17, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
     end
 end
 Init()
@@ -148,9 +144,7 @@ local Update = function()
         end
         sleep(0.1)
     end
-    --Taskmaster:eventListener("monitor_touch",HandleMonitorTouch):run()
 end
---Update()
 
 parallel.waitForAny(UIF.Event, Update)
 
