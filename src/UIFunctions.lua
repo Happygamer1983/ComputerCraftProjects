@@ -76,6 +76,10 @@ function UIF.Clear(Mon)
     Mon.screen.setCursorPos(1,1)
 end
 
+coroutine.wrap(function()
+    ButtonUpdate()
+end)()
+
 return UIF
 
 --[[
