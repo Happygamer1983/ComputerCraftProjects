@@ -22,19 +22,10 @@ local Event = function()
 end
 
 local ButtonUpdate = function()
-    --[[
-    print("Button pressed")
-    for i,v in pairs(Buttons) do
-        print(i)
-        if IsWithinField(touchX, touchY, v.x, v.y, string.len(v.text) + 2, v.height) then
-            v.callback(event, x, y)  
-            touchX, touchY = nil, nil
-        end  
-    end 
-    ]]
+    return
 end
 
-parallel.waitForAny(ButtonUpdate, Event)
+parallel.waitForAny(Event, ButtonUpdate)
 
 function UIF.FormatNum(number)
     number = number or 0  -- Default to 0 if nil
