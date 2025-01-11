@@ -22,6 +22,8 @@ local TempColor = colors.green
 local TempBarColor = colors.green
 local RemainingColor = colors.green
 
+local ReactorCardData
+
 local UIF = require("UIFunctions")
 
 local ConvertNumber = function(str)
@@ -61,17 +63,7 @@ local ShutdownReactor = function(event, x, y)
     rs.setBundledOutput("back", 0)
 end
 
-while true do
-    UIF.Clear(Mon)
-    Mon.screen.setTextScale(1)
-
-    UIF.DrawText(Mon, 2,1, "Test Program", DefaultTextColor, DefaultBackgroundColor)
-
-    local Success, Retruned = pcall(function()
-        return GetReactorCardData(peripheral.wrap("left").getCardData())
-    end)
-
-    --[[
+--[[
     CardInfo = {
     [1] = temp          (number)
     [2] = on/off        (string)
@@ -82,11 +74,40 @@ while true do
     }
     ]]
 
+local DrawDynamicUI = function(v)
+    UIF.DrawTextLeftRight(Mon, 2, 1, 1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
+
+    UIF.DrawTextLeftRight(Mon, 2, 3, 1, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
+    UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
+
+    UIF.DrawTextLeftRight(Mon, 2, 6, 1, "Reactor Output:", v[5].." / EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
+    UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
+
+    UIF.DrawTextLeftRight(Mon, 2, 9, 1, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
+end
+
+local Init = function()
+    UIF.Clear(Mon)
+    Mon.screen.setTextScale(1)
+
+    local Success, Retruned = pcall(function()
+        ReactorCardData = GetReactorCardData(peripheral.wrap("left").getCardData())
+    end)
+
     if not Success then
         UIF.DrawText(Mon, 2,1, Retruned, colors.red, DefaultBackgroundColor)
-        break
+        return
     end
 
+    for i,v in pairs(Retruned) do
+        DrawDynamicUI(v)
+
+        UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
+        UIF.NewButton(Mon, 2, 17, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
+    end
+end
+
+local Update = function()
     for i,v in pairs(Retruned) do
         if v[1] == "Out of Range" then
             UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
@@ -112,22 +133,12 @@ while true do
             StatusColor = colors.lime
         end
 
-        UIF.DrawTextLeftRight(Mon, 2, 1, 1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
-
-        UIF.DrawTextLeftRight(Mon, 2, 3, 1, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
-        UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
-
-        UIF.DrawTextLeftRight(Mon, 2, 6, 1, "Reactor Output:", v[5].." / EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
-        UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
-
-        UIF.DrawTextLeftRight(Mon, 2, 9, 1, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
-
-        parallel.waitForAny(UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor), StartReactor)
-        
-        parallel.waitForAny(UIF.NewButton(Mon, 2, 17, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor), ShutdownReactor)
-       
-
+        DrawDynamicUI(v)
     end
+end
+
+while true do
+    Update()
     sleep(0.1)
 end
 

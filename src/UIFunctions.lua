@@ -1,4 +1,15 @@
 local UIF = {}
+local Buttons = {}
+
+local ButtonUpdate = function()
+    for i,v in pairs(Buttons) do
+        local event, side, touchX, touchY = os.pullEvent("monitor_touch") -- Move into own seperate function
+
+        if touchX >= v.x and touchX < v.x + string.len(v.text) + 2 and touchY >= v.y and touchY < v.y + height then
+            v.callback(event, x, y)   
+        end  
+    end
+end
 
 function UIF.FormatNum(number)
     number = number or 0  -- Default to 0 if nil
@@ -54,13 +65,7 @@ function UIF.NewButton(Mon, x, y, height, text, text_color, button_color, callba
     end
     UIF.DrawText(Mon, x + 1, y + height / 2, text, text_color, button_color)
 
-    --coroutine.resume(coroutine.create(function()
-    local event, side, touchX, touchY = os.pullEvent("monitor_touch")
-    if touchX >= x and touchX < x + string.len(text) + 2 and touchY >= y and touchY < y + height then
-        callback(event, x, y)
-    end  
-    --end))
-    
+    table.insert(Buttons, {Mon, x, y, height, text, text_color, button_color, callback})
 end
 
 function UIF.Clear(Mon)
