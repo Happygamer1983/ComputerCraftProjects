@@ -74,7 +74,7 @@ end
     }
     ]]
 
-local DrawDynamicUI = function(v)
+local DrawDynamicUI = function(i, v)
     UIF.DrawTextLeftRight(Mon, 2, 1, 1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
 
     UIF.DrawTextLeftRight(Mon, 2, 3, 1, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
@@ -99,13 +99,14 @@ local Init = function()
         return
     end
 
-    for i,v in pairs(Retruned) do
-        DrawDynamicUI(v)
+    for i,v in pairs(ReactorCardData) do
+        DrawDynamicUI(i, v)
 
         UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
         UIF.NewButton(Mon, 2, 17, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
     end
 end
+Init()
 
 local Update = function()
     if ReactorCardData then
@@ -134,7 +135,7 @@ local Update = function()
                 StatusColor = colors.lime
             end
     
-            DrawDynamicUI(v)
+            DrawDynamicUI(i, v)
         end
     end
 end
