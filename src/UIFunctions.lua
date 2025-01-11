@@ -1,6 +1,6 @@
 local UIF = {}
 local Buttons = {}
-local _, _, touchX, touchY
+--local _, _, touchX, touchY
 
 local IsWithinField = function(x,y,start_x,start_y,width,height)
     return x >= start_x and x < start_x+width and y >= start_y and y < start_y+height
@@ -8,15 +8,14 @@ end
 
 local Event = function()
     while true do
-        _, _, touchX, touchY = os.pullEvent("monitor_touch") 
+        local _, _, touchX, touchY = os.pullEvent("monitor_touch") 
+        print("Input")
         for i,v in pairs(Buttons) do
-            print(i)
             if IsWithinField(touchX, touchY, v.x, v.y, string.len(v.text) + 2, v.height) then
                 v.callback(event, x, y)  
                 touchX, touchY = nil, nil
             end  
         end 
-        print("Touched")
     end
     
 end
