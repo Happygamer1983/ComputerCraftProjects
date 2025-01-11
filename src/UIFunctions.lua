@@ -1,6 +1,6 @@
 local UIF = {}
 local Buttons = {}
-local touchX, touchY
+local _, _, touchX, touchY
 
 local Event = function()
     while true do
@@ -16,6 +16,9 @@ local ButtonUpdate = function()
     print("Button pressed")
     print(Buttons)
     for i,v in pairs(Buttons) do
+        print(i,v)
+    end
+    for i,v in pairs(Buttons) do
         print(i)
         if IsWithinField(touchX, touchY, v.x, v.y, string.len(v.text) + 2, v.height) then
             v.callback(event, x, y)  
@@ -23,6 +26,8 @@ local ButtonUpdate = function()
         end  
     end 
 end
+
+parallel.waitForAny(ButtonUpdate, Event)
 
 function UIF.FormatNum(number)
     number = number or 0  -- Default to 0 if nil
@@ -97,11 +102,5 @@ function UIF.Clear(Mon)
     Mon.screen.clear()
     Mon.screen.setCursorPos(1,1)
 end
-
-parallel.waitForAny(ButtonUpdate, Event)
-
---coroutine.wrap(function()
-    --Event()
---end)()
 
 return UIF
