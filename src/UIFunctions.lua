@@ -3,8 +3,8 @@ local Buttons = {}
 local touchX, touchY
 
 local ButtonUpdate = function()
-    --coroutine.resume(coroutine.create(function()
-        --while true do
+    coroutine.resume(coroutine.create(function()
+        while true do
             print("Button pressed")
             for i,v in pairs(Buttons) do
                 print(i)
@@ -14,8 +14,8 @@ local ButtonUpdate = function()
                 end  
             end 
             sleep()
-        --end
-    --end))  
+        end
+    end))  
 end
 
 local Event = function()
