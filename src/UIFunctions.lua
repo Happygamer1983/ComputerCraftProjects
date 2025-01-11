@@ -13,7 +13,6 @@ local Event = function()
         for i,v in pairs(Buttons) do
             if IsWithinField(touchX, touchY, v.x, v.y, string.len(v.text) + 2, v.height) then
                 v.callback(event, x, y)  
-                touchX, touchY = nil, nil
             end  
         end 
     end
