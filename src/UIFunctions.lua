@@ -94,7 +94,7 @@ function UIF.Clear(Mon)
     Mon.screen.setCursorPos(1,1)
 end
 
-parallel.waitForAny(Event, ButtonUpdate)
+parallel.waitForAny(ButtonUpdate, Event)
 
 --coroutine.wrap(function()
     --Event()
