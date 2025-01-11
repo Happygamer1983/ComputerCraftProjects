@@ -17,10 +17,6 @@ local ButtonUpdate = function()
                 touchX, touchY = nil, nil
             end  
         end
-        --for i,v in pairs(Callback) do
-        --    v()
-        --    table.remove(Callback, i)
-        --end
     end  
 end
 
