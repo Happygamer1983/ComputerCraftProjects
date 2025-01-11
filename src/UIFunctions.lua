@@ -81,9 +81,3 @@ coroutine.wrap(function()
 end)()
 
 return UIF
-
---[[
-function UIF.DrawLine()
-   
-end
-]]
