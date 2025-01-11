@@ -21,7 +21,6 @@ local Event = function()
 end
 
 local ButtonUpdate = function()
-    return
 end
 
 parallel.waitForAny(Event, ButtonUpdate)
