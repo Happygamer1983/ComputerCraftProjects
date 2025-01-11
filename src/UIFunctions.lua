@@ -9,17 +9,19 @@ local Event = function()
 end
 
 local ButtonUpdate = function()
-    print("Button pressed")
-    for i,v in pairs(Buttons) do
-        if touchX >= v.x and touchX < v.x + string.len(v.text) + 2 and touchY >= v.y and touchY < v.y + height then
-            v.callback(event, x, y)  
-            touchX, touchY = nil, nil
-        end  
-    end
-    --for i,v in pairs(Callback) do
-    --    v()
-    --    table.remove(Callback, i)
-    --end
+    while true do
+        print("Button pressed")
+        for i,v in pairs(Buttons) do
+            if touchX >= v.x and touchX < v.x + string.len(v.text) + 2 and touchY >= v.y and touchY < v.y + height then
+                v.callback(event, x, y)  
+                touchX, touchY = nil, nil
+            end  
+        end
+        --for i,v in pairs(Callback) do
+        --    v()
+        --    table.remove(Callback, i)
+        --end
+    end  
 end
 
 function UIF.FormatNum(number)
