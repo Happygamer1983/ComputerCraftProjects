@@ -3,9 +3,9 @@ local Buttons = {}
 local _, _, touchX, touchY
 
 local Event = function()
-    while true do
-        _, _, touchX, touchY = os.pullEvent("monitor_touch") 
-    end
+    repeat _, _, touchX, touchY = os.pullEvent("monitor_touch") 
+    until touchX
+    print("Touched")
 end
 
 local IsWithinField = function(x,y,start_x,start_y,width,height)
@@ -14,10 +14,6 @@ end
 
 local ButtonUpdate = function()
     print("Button pressed")
-    print(Buttons)
-    for i,v in pairs(Buttons) do
-        print(i,v)
-    end
     for i,v in pairs(Buttons) do
         print(i)
         if IsWithinField(touchX, touchY, v.x, v.y, string.len(v.text) + 2, v.height) then
