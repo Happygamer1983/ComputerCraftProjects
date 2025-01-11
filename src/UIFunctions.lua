@@ -64,12 +64,21 @@ function UIF.NewButton(Mon, x, y, height, text, text_color, button_color, callba
     end
     UIF.DrawText(Mon, x + 1, y + height / 2, text, text_color, button_color)
 
-    table.insert(Buttons, {Mon, x, y, height, text, text_color, button_color, callback})
+    table.insert(Buttons, {
+        Mon = Mon,
+        x = x,
+        y = y,
+        height = height,
+        text = text,
+        text_color = text_color,
+        button_color = button_color,
+        callback = callback
+    })
 end
 
 function UIF.Clear(Mon)
-    term.clear()
-    term.setCursorPos(1,1)
+    --term.clear()
+    --term.setCursorPos(1,1)
     Mon.screen.setBackgroundColor(colors.black)
     Mon.screen.clear()
     Mon.screen.setCursorPos(1,1)
