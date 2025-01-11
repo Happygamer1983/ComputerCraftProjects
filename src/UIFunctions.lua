@@ -86,7 +86,9 @@ function UIF.Clear(Mon)
 end
 
 coroutine.wrap(function()
-    ButtonUpdate()
+    while true do
+        ButtonUpdate()
+    end
 end)()
 
 return UIF
