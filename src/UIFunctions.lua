@@ -2,9 +2,26 @@ local UIF = {}
 local Buttons = {}
 local touchX, touchY
 
+local ButtonUpdate = function()
+    --coroutine.resume(coroutine.create(function()
+        --while true do
+            print("Button pressed")
+            for i,v in pairs(Buttons) do
+                print(i)
+                if IsWithinField(touchX, touchY, v.x, v.y, string.len(v.text) + 2, v.height) then
+                    v.callback(event, x, y)  
+                    touchX, touchY = nil, nil
+                end  
+            end 
+            sleep()
+        --end
+    --end))  
+end
+
 local Event = function()
     while true do
         _, _, touchX, touchY = os.pullEvent("monitor_touch") 
+        ButtonUpdate()
     end
 end
 
@@ -12,16 +29,7 @@ local IsWithinField = function(x,y,start_x,start_y,width,height)
     return x >= start_x and x < start_x+width and y >= start_y and y < start_y+height
 end
 
-local ButtonUpdate = function()
-    print("Button pressed")
-    for i,v in pairs(Buttons) do
-        print(i)
-        if IsWithinField(touchX, touchY, v.x, v.y, string.len(v.text) + 2, v.height) then
-            v.callback(event, x, y)  
-            touchX, touchY = nil, nil
-        end  
-    end 
-end
+
 
 function UIF.FormatNum(number)
     number = number or 0  -- Default to 0 if nil
@@ -97,7 +105,7 @@ function UIF.Clear(Mon)
     Mon.screen.setCursorPos(1,1)
 end
 
-parallel.waitForAny(ButtonUpdate, Event)
+--parallel.waitForAny(ButtonUpdate, Event)
 
 --coroutine.wrap(function()
     --Event()
