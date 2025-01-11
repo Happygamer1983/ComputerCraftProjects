@@ -1,6 +1,6 @@
 local UIF = {}
 local Buttons = {}
-local touchX, touchY = {}
+local touchX, touchY
 
 local Event = function()
     while true do
@@ -9,9 +9,11 @@ local Event = function()
 end
 
 local ButtonUpdate = function()
+    print("Button pressed")
     for i,v in pairs(Buttons) do
         if touchX >= v.x and touchX < v.x + string.len(v.text) + 2 and touchY >= v.y and touchY < v.y + height then
-            v.callback(event, x, y)   
+            v.callback(event, x, y)  
+            touchX, touchY = nil, nil
         end  
     end
     --for i,v in pairs(Callback) do
