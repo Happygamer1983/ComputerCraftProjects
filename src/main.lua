@@ -92,7 +92,7 @@ local DrawDynamicUI = function(i, v)
     UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
     UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
 
-    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." / EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
+    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
     UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
 
     UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
@@ -114,6 +114,7 @@ Init()
 
 local Update = function()
     while true do
+        UIF.Clear(Mon)
         if ReactorCardData then
             GetReactorCardData(peripheral.wrap("left").getCardData())
     
@@ -145,6 +146,7 @@ local Update = function()
                 DrawDynamicUI(i, v)
             end
         end
+        sleep(0.1)
     end
     --Taskmaster:eventListener("monitor_touch",HandleMonitorTouch):run()
 end
