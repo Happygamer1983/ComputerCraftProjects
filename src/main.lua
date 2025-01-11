@@ -82,19 +82,19 @@ end
 ]]
 
 local DrawDynamicUI = function(i, v)
-    UIF.DrawTextLeftRight(Mon, 2, 1, 1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
+    UIF.DrawTextLeftRight(Mon, 2, 1, 0, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
 
-    UIF.DrawTextLeftRight(Mon, 2, 3, 1, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
+    UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
     UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
 
-    UIF.DrawTextLeftRight(Mon, 2, 6, 1, "Reactor Output:", v[5].." / EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
+    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." / EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
     UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
 
-    UIF.DrawTextLeftRight(Mon, 2, 9, 1, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
+    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
 end
 
 local Init = function()
-    --UIF.Clear(Mon)
+    UIF.Clear(Mon)
     Mon.screen.setTextScale(1)
     GetReactorCardData(peripheral.wrap("left").getCardData())
 
