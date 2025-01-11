@@ -113,42 +113,42 @@ end
 Init()
 
 local Update = function()
-    if ReactorCardData then
-        GetReactorCardData(peripheral.wrap("left").getCardData())
-
-        for i,v in pairs(ReactorCardData) do
-            if v[1] == "Out of Range" then
-                UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
-                return
-            elseif ConvertNumber(v[1]) >= 7500 then
-                TempColor = colors.red
-                TempBarColor = colors.red
-            elseif ConvertNumber(v[1]) >= 6500 then
-                TempColor = colors.orange
-                TempBarColor = colors.orange
-            elseif ConvertNumber(v[1]) >= 4000 then
-                TempColor = colors.yellow
-            elseif ConvertNumber(v[1]) >= 2000 then
-                TempColor = colors.lime
-            else
-                TempColor = colors.green
-                TempBarColor = colors.green
-            end
+    while true do
+        if ReactorCardData then
+            GetReactorCardData(peripheral.wrap("left").getCardData())
     
-            if v[2] == "Off" then
-                StatusColor = colors.red
-            else
-                StatusColor = colors.lime
+            for i,v in pairs(ReactorCardData) do
+                if v[1] == "Out of Range" then
+                    UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
+                    return
+                elseif ConvertNumber(v[1]) >= 7500 then
+                    TempColor = colors.red
+                    TempBarColor = colors.red
+                elseif ConvertNumber(v[1]) >= 6500 then
+                    TempColor = colors.orange
+                    TempBarColor = colors.orange
+                elseif ConvertNumber(v[1]) >= 4000 then
+                    TempColor = colors.yellow
+                elseif ConvertNumber(v[1]) >= 2000 then
+                    TempColor = colors.lime
+                else
+                    TempColor = colors.green
+                    TempBarColor = colors.green
+                end
+        
+                if v[2] == "Off" then
+                    StatusColor = colors.red
+                else
+                    StatusColor = colors.lime
+                end
+        
+                DrawDynamicUI(i, v)
             end
-    
-            DrawDynamicUI(i, v)
         end
     end
-    Taskmaster:eventListener("monitor_touch",HandleMonitorTouch):run()
+    --Taskmaster:eventListener("monitor_touch",HandleMonitorTouch):run()
 end
+--Update()
 
-while true do
-    Update()
-    sleep(0.1)
-end
+parallel.waitForAny(UIF.Event, Update)
 

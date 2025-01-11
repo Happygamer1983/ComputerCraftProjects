@@ -6,8 +6,7 @@ local IsWithinField = function(x,y,start_x,start_y,width,height)
     return x >= start_x and x < start_x+width and y >= start_y and y < start_y+height
 end
 
-local Event = function()
-    --[[
+function UIF.Event()
     while true do
         local _, _, touchX, touchY = os.pullEvent("monitor_touch") 
         print("Input")
@@ -17,7 +16,6 @@ local Event = function()
             end  
         end 
     end
-    ]]
 end
 
 function UIF.FormatNum(number)
