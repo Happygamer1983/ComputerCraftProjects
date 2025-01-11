@@ -36,23 +36,30 @@ local GetReactorCardData = function(CardData)
     local sortedTables = {}
     local cardSize = 6 -- Number of entries per card
 
-    for i = 1, #CardData, cardSize do
-        local cardData = {}
-
-        -- Check if the card contains "Out of Range"
-        if CardData[i] == "Out of Range" then
-            table.insert(cardData, "Out of Range")
-        else
-            for j = 0, cardSize - 1 do
-                local value = CardData[i + j]
-                table.insert(cardData, value)
+    local Success, Retruned = pcall(function()
+        for i = 1, #CardData, cardSize do
+            local cardData = {}
+    
+            -- Check if the card contains "Out of Range"
+            if CardData[i] == "Out of Range" then
+                table.insert(cardData, "Out of Range")
+            else
+                for j = 0, cardSize - 1 do
+                    local value = CardData[i + j]
+                    table.insert(cardData, value)
+                end
             end
+    
+            table.insert(sortedTables, cardData)
         end
+    end)
 
-        table.insert(sortedTables, cardData)
+    if not Success then
+        UIF.DrawText(Mon, 2,1, Retruned, colors.red, DefaultBackgroundColor)
+        return
     end
 
-    return sortedTables
+    ReactorCardData = sortedTables
 end
 
 local StartReactor = function(event, x, y)
@@ -72,7 +79,7 @@ end
     [5] = EU/t output   (number)
     [6] = remaining     (string)
     }
-    ]]
+]]
 
 local DrawDynamicUI = function(i, v)
     UIF.DrawTextLeftRight(Mon, 2, 1, 1, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
@@ -87,17 +94,9 @@ local DrawDynamicUI = function(i, v)
 end
 
 local Init = function()
-    UIF.Clear(Mon)
+    --UIF.Clear(Mon)
     Mon.screen.setTextScale(1)
-
-    local Success, Retruned = pcall(function()
-        ReactorCardData = GetReactorCardData(peripheral.wrap("left").getCardData())
-    end)
-
-    if not Success then
-        UIF.DrawText(Mon, 2,1, Retruned, colors.red, DefaultBackgroundColor)
-        return
-    end
+    GetReactorCardData(peripheral.wrap("left").getCardData())
 
     for i,v in pairs(ReactorCardData) do
         DrawDynamicUI(i, v)
@@ -110,6 +109,8 @@ Init()
 
 local Update = function()
     if ReactorCardData then
+        GetReactorCardData(peripheral.wrap("left").getCardData())
+
         for i,v in pairs(ReactorCardData) do
             if v[1] == "Out of Range" then
                 UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
