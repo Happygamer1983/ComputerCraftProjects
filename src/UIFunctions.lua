@@ -7,16 +7,18 @@ local IsWithinField = function(x,y,start_x,start_y,width,height)
 end
 
 local Event = function()
-    repeat _, _, touchX, touchY = os.pullEvent("monitor_touch") 
-    until touchX
-    for i,v in pairs(Buttons) do
-        print(i)
-        if IsWithinField(touchX, touchY, v.x, v.y, string.len(v.text) + 2, v.height) then
-            v.callback(event, x, y)  
-            touchX, touchY = nil, nil
-        end  
-    end 
-    print("Touched")
+    while true do
+        _, _, touchX, touchY = os.pullEvent("monitor_touch") 
+        for i,v in pairs(Buttons) do
+            print(i)
+            if IsWithinField(touchX, touchY, v.x, v.y, string.len(v.text) + 2, v.height) then
+                v.callback(event, x, y)  
+                touchX, touchY = nil, nil
+            end  
+        end 
+        print("Touched")
+    end
+    
 end
 
 local ButtonUpdate = function()
