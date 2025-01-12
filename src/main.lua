@@ -25,6 +25,7 @@ local RemainingColor = colors.green
 local ReactorCardData
 
 local UIF = require("UIFunctions")
+local Config = require("PerfConfig")
 local Taskmaster = require("taskmaster")()
 
 local ConvertNumber = function(str)
@@ -34,6 +35,18 @@ local ConvertNumber = function(str)
 end
 
 local GetReactorCardData = function(CardData)
+    -- open id channels (1,2)
+    -- id 0 is broadcast
+
+
+
+
+
+
+
+
+
+
     local sortedTables = {}
     local cardSize = 6 -- Number of entries per card
 
