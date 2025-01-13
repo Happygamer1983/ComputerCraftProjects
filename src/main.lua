@@ -7,6 +7,7 @@ assert(peripheral.find("modem"), "No Modem attached!")
 -- More checks
 
 print("Done!")
+local UpdatingTick = false
 
 local ReactorScreens = {}
 local CoolantScreens = {}
@@ -59,18 +60,18 @@ local GetReactorCardData = function()
         print("Error: Failed to parse card data!")
         return
     end
-    
+
     for i, Screen in pairs(ReactorScreens) do
         local ReactorData = CardData["Reactor"]
         if tonumber(ReactorData.ScreenID) == tonumber(Screen.ScreenID) then
-            Screen.ScreenData = sortCardData(ReactorData.Data, 6)
+            Screen.ScreenData = SortCardData(ReactorData.Data, 6)
         end
     end
 
     for i, Screen in pairs(CoolantScreens) do
         local HeatData = CardData["Heat"]
         if tonumber(HeatData.ScreenID) == tonumber(Screen.ScreenID) then
-            Screen.ScreenData = sortCardData(HeatData.Data, 6)
+            Screen.ScreenData = SortCardData(HeatData.Data, 6)
         end
     end
 end
@@ -210,6 +211,12 @@ local Update = function()
                 
                     UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
                     UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
+
+                    if UpdatingTick then
+                        UIF.DrawText(Mon, 1, Mon.Y - 1, ".", colors.gray, DefaultBackgroundColor)
+                    else
+                        UIF.DrawText(Mon, 20, 12, "", colors.gray, DefaultBackgroundColor)
+                    end
                 end
             end  
         end
