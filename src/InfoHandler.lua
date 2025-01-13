@@ -1,8 +1,12 @@
 rednet.open("bottom")
+local ScreenID
+
+local file = fs.open("ID", "r")
+ScreenID = file.readAll()
+file.close()
 
 while true do
     local ID, message = rednet.receive()
-    print("Message Recieved!")
     
     local CardData = {}
     local HeatCard = peripheral.wrap("left")
@@ -27,9 +31,8 @@ while true do
         ReactorData = {"Error getting Reactor Card Data!"}
     end
     
-    CardData["Heat"] = HeatData
-    CardData["Reactor"] = ReactorData
-    print("Sending Back")
-    rednet.send(ID, textutils.serializeJSON(CardData))
+    CardData["Heat"] = {Data = HeatData, ScreenID = ScreenID}
+    CardData["Reactor"] = {Data = ReactorData, ScreenID = ScreenID}
+    rednet.send(ID, textutils.serialize(CardData))
     sleep()
 end

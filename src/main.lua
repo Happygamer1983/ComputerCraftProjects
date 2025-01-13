@@ -19,9 +19,6 @@ local TempColor = colors.green
 local TempBarColor = colors.green
 local RemainingColor = colors.green
 
-local ReactorCardData
-local CoolantCardData
-
 local UIF = require("UIFunctions")
 local Config = require("PerfConfig")
 local Taskmaster = require("taskmaster")()
@@ -56,15 +53,28 @@ local GetReactorCardData = function()
         print("Error: No message received!")
         return
     end
-    print("Message Recieved!")
+
     local success, CardData = pcall(textutils.unserialize, message)
     if not success or not CardData then
         print("Error: Failed to parse card data!")
         return
     end
 
-    ReactorCardData = SortCardData(CardData["Reactor"], 6)
-    CoolantCardData = SortCardData(CardData["Heat"], 6)
+    for i, v in pairs(ReactorScreens) do
+        for _, reactor in ipairs(CardData["Reactor"]) do
+            if reactor.ScreenID == v.ScreenID then
+                v.ScreenData = sortCardData(reactor, 6)
+            end
+        end
+    end
+
+    for i, v in pairs(CoolantScreens) do
+        for _, reactor in ipairs(CardData["Heat"]) do
+            if reactor.ScreenID == v.ScreenID then
+                v.ScreenData = sortCardData(reactor, 6)
+            end
+        end
+    end
 end
 
 local StartReactor = function(event, x, y)
@@ -86,24 +96,6 @@ end
     }
 ]]
 
-local DrawDynamicUI = function(i, v)
-    for i,Mon in pairs(ReactorScreens) do
-        UIF.Clear(Mon)
-        UIF.DrawTextLeftRight(Mon, 2, 1, 0, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
-
-        UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
-        UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
-    
-        UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
-        UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
-    
-        UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
-    
-        UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
-        UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
-    end
-end
-
 local Init = function()
     assert(peripheral.wrap(Config["Reactor_Screen_1"]), "Invalid Config [1]")
     assert(peripheral.wrap(Config["Reactor_Coolant_Screen_1"]), "Invalid Config [2]")
@@ -118,22 +110,31 @@ local Init = function()
     local Reactor_Coolant_Screen_1 = peripheral.wrap(Config["Reactor_Coolant_Screen_1"])
     local Reactor_Coolant_1_X, Reactor_Coolant_1_Y = Reactor_Coolant_Screen_1.getSize()
 
+    local Reactor_ScreenID_1 = Config["ScreenID_1"]
+    ------------------------------------------------------------------------------------------------------
+
     local Reactor_Screen_2 = peripheral.wrap(Config["Reactor_Screen_2"])
     local Reactor_2_X, Reactor_2_Y = Reactor_Screen_2.getSize()
 
     local Reactor_Coolant_Screen_2 = peripheral.wrap(Config["Reactor_Coolant_Screen_2"])
     local Reactor_Coolant_2_X, Reactor_Coolant_2_Y = Reactor_Coolant_Screen_2.getSize()
 
+    local Reactor_ScreenID_2 = Config["ScreenID_2"]
+
     ReactorScreens = {
         Screen_1 = {
             screen = Reactor_Screen_1,
             X = Reactor_1_X,
             Y = Reactor_1_Y,
+            ScreenID = Reactor_ScreenID_1,
+            ScreenData = nil,
         },
         Screen_2 = {
             screen = Reactor_Screen_2,
             X = Reactor_2_X,
             Y = Reactor_2_Y,
+            ScreenID = Reactor_ScreenID_2,
+            ScreenData = nil,
         },
     }
 
@@ -142,11 +143,15 @@ local Init = function()
             screen = Reactor_Coolant_Screen_1,
             X = Reactor_Coolant_1_X,
             Y = Reactor_Coolant_1_Y,
+            ScreenID = Reactor_ScreenID_1,
+            ScreenData = nil,
         },
         Screen_2 = {
             screen = Reactor_Coolant_Screen_2,
             X = Reactor_Coolant_2_X,
             Y = Reactor_Coolant_2_Y,
+            ScreenID = Reactor_ScreenID_2,
+            ScreenData = nil,
         },
     }
 
@@ -159,43 +164,64 @@ local Init = function()
         UIF.Clear(Mon)
         Mon.screen.setTextScale(1)
     end
-
-    --for i,v in pairs(ReactorCardData) do
-    --    DrawDynamicUI(i, v)
-    --end
 end
 Init()
 
 local Update = function()
     while true do
         GetReactorCardData()
-    
-        for i,v in pairs(ReactorCardData) do
-            if v[1] == "Out of Range" then
-                UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
-                return
-            elseif ConvertNumber(v[1]) >= 7500 then
-                TempColor = colors.red
-                TempBarColor = colors.red
-            elseif ConvertNumber(v[1]) >= 6500 then
-                TempColor = colors.orange
-                TempBarColor = colors.orange
-            elseif ConvertNumber(v[1]) >= 4000 then
-                TempColor = colors.yellow
-            elseif ConvertNumber(v[1]) >= 2000 then
-                TempColor = colors.lime
-            else
-                TempColor = colors.green
-                TempBarColor = colors.green
+
+        for _, Screen in pairs(ReactorScreens) do
+            local Mon = Screen
+
+            for i, v in pairs(Screen.ScreenData) do
+                if v[1] == "Out of Range" then
+                    UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
+                    return
+                elseif ConvertNumber(v[1]) >= 7500 then
+                    TempColor = colors.red
+                    TempBarColor = colors.red
+                elseif ConvertNumber(v[1]) >= 6500 then
+                    TempColor = colors.orange
+                    TempBarColor = colors.orange
+                elseif ConvertNumber(v[1]) >= 4000 then
+                    TempColor = colors.yellow
+                elseif ConvertNumber(v[1]) >= 2000 then
+                    TempColor = colors.lime
+                else
+                    TempColor = colors.green
+                    TempBarColor = colors.green
+                end
+        
+                if v[2] == "Off" then
+                    StatusColor = colors.red
+                else
+                    StatusColor = colors.lime
+                end
+        
+                UIF.Clear(Mon)
+                UIF.DrawTextLeftRight(Mon, 2, 1, 0, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
+        
+                UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
+                UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
+            
+                UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
+                UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
+            
+                UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
+            
+                UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
+                UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
             end
-    
-            if v[2] == "Off" then
-                StatusColor = colors.red
-            else
-                StatusColor = colors.lime
+        end
+
+        
+        for _, Screen in pairs(CoolantScreens) do
+            local Mon = Screen
+
+            for i, v in pairs(Screen.ScreenData) do
+                --TODO Add Coolant Info
             end
-    
-            DrawDynamicUI(i, v)
         end
         sleep(0.1)
     end
