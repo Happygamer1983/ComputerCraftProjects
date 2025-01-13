@@ -59,25 +59,18 @@ local GetReactorCardData = function()
         print("Error: Failed to parse card data!")
         return
     end
-
-    for i, v in pairs(CardData) do
-        print(i,v)
-    end
-
-    for i, v in pairs(ReactorScreens) do
-        for _, screen in ipairs(CardData["Reactor"]) do
-            print(screen.ScreenID, v.ScreenID)
-            if tonumber(screen.ScreenID) == tonumber(v.ScreenID) then
-                screen.ScreenData = sortCardData(screen.Data, 6)
-            end
+    
+    for i, Screen in pairs(ReactorScreens) do
+        local ReactorData = CardData["Reactor"]
+        if tonumber(ReactorData.ScreenID) == tonumber(Screen.ScreenID) then
+            Screen.ScreenData = sortCardData(ReactorData.Data, 6)
         end
     end
 
-    for i, v in pairs(CoolantScreens) do
-        for _, screen in ipairs(CardData["Heat"]) do
-            if tonumber(screen.ScreenID) == tonumber(v.ScreenID) then
-                screen.ScreenData = sortCardData(screen.Data, 6)
-            end
+    for i, Screen in pairs(CoolantScreens) do
+        local HeatData = CardData["Heat"]
+        if tonumber(HeatData.ScreenID) == tonumber(Screen.ScreenID) then
+            Screen.ScreenData = sortCardData(HeatData.Data, 6)
         end
     end
 end
