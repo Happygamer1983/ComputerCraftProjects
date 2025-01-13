@@ -174,45 +174,47 @@ local Update = function()
         for _, Screen in pairs(ReactorScreens) do
             local Mon = Screen
 
-            for i, v in pairs(Screen.ScreenData) do
-                if v[1] == "Out of Range" then
-                    UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
-                    return
-                elseif ConvertNumber(v[1]) >= 7500 then
-                    TempColor = colors.red
-                    TempBarColor = colors.red
-                elseif ConvertNumber(v[1]) >= 6500 then
-                    TempColor = colors.orange
-                    TempBarColor = colors.orange
-                elseif ConvertNumber(v[1]) >= 4000 then
-                    TempColor = colors.yellow
-                elseif ConvertNumber(v[1]) >= 2000 then
-                    TempColor = colors.lime
-                else
-                    TempColor = colors.green
-                    TempBarColor = colors.green
+            if Screen.ScreenData then
+                for i, v in pairs(Screen.ScreenData) do
+                    if v[1] == "Out of Range" then
+                        UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
+                        return
+                    elseif ConvertNumber(v[1]) >= 7500 then
+                        TempColor = colors.red
+                        TempBarColor = colors.red
+                    elseif ConvertNumber(v[1]) >= 6500 then
+                        TempColor = colors.orange
+                        TempBarColor = colors.orange
+                    elseif ConvertNumber(v[1]) >= 4000 then
+                        TempColor = colors.yellow
+                    elseif ConvertNumber(v[1]) >= 2000 then
+                        TempColor = colors.lime
+                    else
+                        TempColor = colors.green
+                        TempBarColor = colors.green
+                    end
+            
+                    if v[2] == "Off" then
+                        StatusColor = colors.red
+                    else
+                        StatusColor = colors.lime
+                    end
+            
+                    UIF.Clear(Mon)
+                    UIF.DrawTextLeftRight(Mon, 2, 1, 0, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
+            
+                    UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
+                    UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
+                
+                    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
+                    UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
+                
+                    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
+                
+                    UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
+                    UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
                 end
-        
-                if v[2] == "Off" then
-                    StatusColor = colors.red
-                else
-                    StatusColor = colors.lime
-                end
-        
-                UIF.Clear(Mon)
-                UIF.DrawTextLeftRight(Mon, 2, 1, 0, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
-        
-                UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
-                UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
-            
-                UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
-                UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
-            
-                UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
-            
-                UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
-                UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
-            end
+            end  
         end
 
         
@@ -220,7 +222,9 @@ local Update = function()
             local Mon = Screen
 
             for i, v in pairs(Screen.ScreenData) do
-                --TODO Add Coolant Info
+                if Screen.ScreenData then
+                    --TODO Add Coolant Info
+                end
             end
         end
         sleep(0.1)

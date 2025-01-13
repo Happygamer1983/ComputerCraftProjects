@@ -1,7 +1,7 @@
 rednet.open("bottom")
 local ScreenID
 
-local file = fs.open("ID", "r")
+local file = fs.open("ID.lua", "r")
 ScreenID = file.readAll()
 file.close()
 
