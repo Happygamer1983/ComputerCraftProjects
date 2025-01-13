@@ -17,9 +17,6 @@ Modem.open(2) -- Computer 2
 
 local ReactorScreens = {}
 local CoolantScreens = {}
-local ScreenX, ScreenY = Screen.getSize()
-local Mon = {}
-Mon.screen, Mon.X, Mon.Y = Screen, ScreenX, ScreenY
 
 local DefaultTextColor = colors.white
 local DefaultBackgroundColor = colors.black
