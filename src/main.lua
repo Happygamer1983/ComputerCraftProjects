@@ -61,17 +61,18 @@ local GetReactorCardData = function()
     end
 
     for i, v in pairs(ReactorScreens) do
-        for _, reactor in ipairs(CardData["Reactor"]) do
-            if reactor.ScreenID == v.ScreenID then
-                v.ScreenData = sortCardData(reactor, 6)
+        for _, screen in ipairs(CardData["Reactor"]) do
+            print(screen.ScreenID, v.ScreenID)
+            if tonumber(screen.ScreenID) == tonumber(v.ScreenID) then
+                screen.ScreenData = sortCardData(screen.Data, 6)
             end
         end
     end
 
     for i, v in pairs(CoolantScreens) do
-        for _, reactor in ipairs(CardData["Heat"]) do
-            if reactor.ScreenID == v.ScreenID then
-                v.ScreenData = sortCardData(reactor, 6)
+        for _, screen in ipairs(CardData["Heat"]) do
+            if tonumber(screen.ScreenID) == tonumber(v.ScreenID) then
+                screen.ScreenData = sortCardData(screen.Data, 6)
             end
         end
     end
@@ -84,17 +85,6 @@ end
 local ShutdownReactor = function(event, x, y)
     rs.setBundledOutput("back", 0)
 end
-
---[[
-    CardInfo = {
-    [1] = temp          (number)
-    [2] = on/off        (string)
-    [3] = max heat      (number)
-    [4] = meltdown temp (number)
-    [5] = EU/t output   (number)
-    [6] = remaining     (string)
-    }
-]]
 
 local Init = function()
     assert(peripheral.wrap(Config["Reactor_Screen_1"]), "Invalid Config [1]")
@@ -167,13 +157,24 @@ local Init = function()
 end
 Init()
 
+--[[
+    CardInfo = {
+    [1] = temp          (number)
+    [2] = on/off        (string)
+    [3] = max heat      (number)
+    [4] = meltdown temp (number)
+    [5] = EU/t output   (number)
+    [6] = remaining     (string)
+    }
+]]
+
 local Update = function()
     while true do
         GetReactorCardData()
 
         for _, Screen in pairs(ReactorScreens) do
             local Mon = Screen
-
+            print(Screen.ScreenData)
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
                     if v[1] == "Out of Range" then
@@ -221,11 +222,11 @@ local Update = function()
         for _, Screen in pairs(CoolantScreens) do
             local Mon = Screen
 
-            for i, v in pairs(Screen.ScreenData) do
-                if Screen.ScreenData then
+            --for i, v in pairs(Screen.ScreenData) do
+            --    if Screen.ScreenData then
                     --TODO Add Coolant Info
-                end
-            end
+            --    end
+            --end
         end
         sleep(0.1)
     end
