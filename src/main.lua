@@ -39,30 +39,26 @@ local ConvertNumber = function(str)
 end
 
 local GetReactorCardData = function()
-    local GetReactorCardData = function()
-        --Modem.transmit(0, 0, "GetCardData")
-        rednet.broadcast("GetCardData")
+    rednet.broadcast("GetCardData")
         
-        local ID, message = rednet.receive()
-        print("Message Recieved!")
-        local CardData = textutils.unserialize(message)
-    
-        local sortedTables = {}
-        for i = 1, #CardData, 6 do
-            local cardData = {}
-            if CardData[i] == "Out of Range" then
-                table.insert(cardData, "Out of Range")
-            else
-                for j = 0, 5 do
-                    table.insert(cardData, CardData[i + j])
-                end
+    local ID, message = rednet.receive()
+    print("Message Recieved!")
+    local CardData = textutils.unserialize(message)
+
+    local sortedTables = {}
+    for i = 1, #CardData, 6 do
+        local cardData = {}
+        if CardData[i] == "Out of Range" then
+            table.insert(cardData, "Out of Range")
+        else
+            for j = 0, 5 do
+                table.insert(cardData, CardData[i + j])
             end
-            table.insert(sortedTables, cardData)
         end
-    
-        ReactorCardData = sortedTables
+        table.insert(sortedTables, cardData)
     end
-    
+
+    ReactorCardData = sortedTables
 end
 
 local StartReactor = function(event, x, y)
