@@ -3,9 +3,9 @@ local VersionFile = fs.open("VERSION", "r")
 print("Loading program...")
 
 assert(http.get(VersionURL).readAll() == VersionFile.readAll(), "Outdated version, please run install.lua again")
-assert(peripheral.getType("right") == "monitor", "No Monitor!")
-assert(peripheral.getType("left") == "info_panel_advanced", "No Reactor Info!")
-assert(peripheral.find("modem") == true, "No Modem attached!")
+--assert(peripheral.getType("right") == "monitor", "No Monitor!")
+--assert(peripheral.getType("left") == "info_panel_advanced", "No Reactor Info!")
+assert(peripheral.find("modem"), "No Modem attached!")
 -- More checks
 
 print("Done!")
@@ -106,10 +106,10 @@ local DrawDynamicUI = function(i, v)
 end
 
 local Init = function()
-    assert(peripheral.wrap(Config[1]), "Invalid Config [1]")
-    assert(peripheral.wrap(Config[2]), "Invalid Config [2]")
-    assert(peripheral.wrap(Config[3]), "Invalid Config [3]")
-    assert(peripheral.wrap(Config[4]), "Invalid Config [4]")
+    assert(peripheral.wrap(Config["Reactor_Screen_1"]), "Invalid Config [1]")
+    assert(peripheral.wrap(Config["Reactor_Coolant_Screen_1"]), "Invalid Config [2]")
+    assert(peripheral.wrap(Config["Reactor_Screen_2"]), "Invalid Config [3]")
+    assert(peripheral.wrap(Config["Reactor_Coolant_Screen_2"]), "Invalid Config [4]")
 
     local Reactor_Screen_1 = peripheral.wrap(Config[1])
     local Reactor_1_X, Reactor_1_Y = Reactor_Screen_1.getSize()
