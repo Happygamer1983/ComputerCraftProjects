@@ -10,10 +10,10 @@ assert(peripheral.find("modem"), "No Modem attached!")
 
 print("Done!")
 
-local Modem = peripheral.find("modem")
-Modem.open(0) -- Broadcast
-Modem.open(1) -- Computer 1
-Modem.open(2) -- Computer 2
+--ocal Modem = peripheral.find("modem")
+--Modem.open(0) -- Broadcast
+--Modem.open(1) -- Computer 1
+--Modem.open(2) -- Computer 2
 
 local ReactorScreens = {}
 local CoolantScreens = {}
@@ -40,16 +40,12 @@ end
 
 local GetReactorCardData = function()
     local GetReactorCardData = function()
-        Modem.transmit(0, 0, "GetCardData")
+        --Modem.transmit(0, 0, "GetCardData")
+        rednet.broadcast("GetCardData")
         
-        local event, side, channel, replyChannel, message = os.pullEvent("modem_message")
-        if channel ~= 0 then return end
-    
-        local success, CardData = pcall(textutils.unserialize, message)
-        if not success or not CardData then
-            print("Error: Failed to retrieve or parse card data!")
-            return
-        end
+        local ID, message = rednet.receive()
+        print("Message Recieved!")
+        local CardData = textutils.unserialize(message)
     
         local sortedTables = {}
         for i = 1, #CardData, 6 do
@@ -111,6 +107,8 @@ local Init = function()
     assert(peripheral.wrap(Config["Reactor_Coolant_Screen_1"]), "Invalid Config [2]")
     assert(peripheral.wrap(Config["Reactor_Screen_2"]), "Invalid Config [3]")
     assert(peripheral.wrap(Config["Reactor_Coolant_Screen_2"]), "Invalid Config [4]")
+
+    rednet.open("bottom")
 
     local Reactor_Screen_1 = peripheral.wrap(Config["Reactor_Screen_1"])
     local Reactor_1_X, Reactor_1_Y = Reactor_Screen_1.getSize()
