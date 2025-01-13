@@ -171,7 +171,7 @@ local Update = function()
     while true do
         UIF.Clear(Mon)
         if ReactorCardData then
-            GetReactorCardData(peripheral.wrap("left").getCardData())
+            GetReactorCardData()
     
             for i,v in pairs(ReactorCardData) do
                 if v[1] == "Out of Range" then
