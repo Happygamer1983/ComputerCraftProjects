@@ -42,42 +42,34 @@ local ConvertNumber = function(str)
 end
 
 local GetReactorCardData = function()
-    Modem.transmit(0, 0, "GetCardData")
-
-    local event, side, channel, replyChannel, message, distance
-    repeat
-        event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
-    until channel
-
-
-    local CardData = textutils.unserialise(message)
-    local sortedTables = {}
-    local cardSize = 6 -- Number of entries per card
-
-    local Success, Retruned = pcall(function()
-        for i = 1, #CardData, cardSize do
-            local cardData = {}
+    local GetReactorCardData = function()
+        Modem.transmit(0, 0, "GetCardData")
     
-            -- Check if the card contains "Out of Range"
+        local event, side, channel, replyChannel, message = os.pullEvent("modem_message")
+        if channel ~= 0 then return end
+    
+        local success, CardData = pcall(textutils.unserialize, message)
+        if not success or not CardData then
+            print("Error: Failed to retrieve or parse card data!")
+            return
+        end
+    
+        local sortedTables = {}
+        for i = 1, #CardData, 6 do
+            local cardData = {}
             if CardData[i] == "Out of Range" then
                 table.insert(cardData, "Out of Range")
             else
-                for j = 0, cardSize - 1 do
-                    local value = CardData[i + j]
-                    table.insert(cardData, value)
+                for j = 0, 5 do
+                    table.insert(cardData, CardData[i + j])
                 end
             end
-    
             table.insert(sortedTables, cardData)
         end
-    end)
-
-    if not Success then
-        UIF.DrawText(Mon, 2,1, Retruned, colors.red, DefaultBackgroundColor)
-        return
+    
+        ReactorCardData = sortedTables
     end
-
-    ReactorCardData = sortedTables
+    
 end
 
 local StartReactor = function(event, x, y)
