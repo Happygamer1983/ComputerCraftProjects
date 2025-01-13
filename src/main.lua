@@ -5,11 +5,18 @@ print("Loading program...")
 assert(http.get(VersionURL).readAll() == VersionFile.readAll(), "Outdated version, please run install.lua again")
 assert(peripheral.getType("right") == "monitor", "No Monitor!")
 assert(peripheral.getType("left") == "info_panel_advanced", "No Reactor Info!")
+assert(peripheral.find("modem") == true, "No Modem attached!")
 -- More checks
 
 print("Done!")
 
-local Screen = peripheral.wrap("right")
+local Modem = peripheral.find("modem")
+Modem.open(0) -- Broadcast
+Modem.open(1) -- Computer 1
+Modem.open(2) -- Computer 2
+
+local ReactorScreens = {}
+local CoolantScreens = {}
 local ScreenX, ScreenY = Screen.getSize()
 local Mon = {}
 Mon.screen, Mon.X, Mon.Y = Screen, ScreenX, ScreenY
@@ -34,19 +41,16 @@ local ConvertNumber = function(str)
     return number
 end
 
-local GetReactorCardData = function(CardData)
-    -- open id channels (1,2)
-    -- id 0 is broadcast
+local GetReactorCardData = function()
+    Modem.transmit(0, 0, "GetCardData")
+
+    local event, side, channel, replyChannel, message, distance
+    repeat
+        event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
+    until channel
 
 
-
-
-
-
-
-
-
-
+    local CardData = textutils.unserialise(message)
     local sortedTables = {}
     local cardSize = 6 -- Number of entries per card
 
@@ -96,21 +100,65 @@ end
 ]]
 
 local DrawDynamicUI = function(i, v)
-    UIF.DrawTextLeftRight(Mon, 2, 1, 0, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
+    for i,Mon in pairs(ReactorScreens) do
+        UIF.DrawTextLeftRight(Mon, 2, 1, 0, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
 
-    UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
-    UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
-
-    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
-    UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
-
-    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
-
-    UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
-    UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
+        UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
+        UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
+    
+        UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
+        UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
+    
+        UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
+    
+        UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
+        UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
+    end
 end
 
 local Init = function()
+    assert(peripheral.wrap(Config[1]), "Invalid Config [1]")
+    assert(peripheral.wrap(Config[2]), "Invalid Config [2]")
+    assert(peripheral.wrap(Config[3]), "Invalid Config [3]")
+    assert(peripheral.wrap(Config[4]), "Invalid Config [4]")
+
+    local Reactor_Screen_1 = peripheral.wrap(Config[1])
+    local Reactor_1_X, Reactor_1_Y = Reactor_Screen_1.getSize()
+
+    local Reactor_Coolant_Screen_1 = peripheral.wrap(Config[2])
+    local Reactor_Coolant_1_X, Reactor_Coolant_1_Y = Reactor_Coolant_Screen_1.getSize()
+
+    local Reactor_Screen_2 = peripheral.wrap(Config[3])
+    local Reactor_2_X, Reactor_2_Y = Reactor_Screen_2.getSize()
+
+    local Reactor_Coolant_Screen_2 = peripheral.wrap(Config[4])
+    local Reactor_Coolant_2_X, Reactor_Coolant_2_Y = Reactor_Coolant_Screen_2.getSize()
+
+    ReactorScreens = {
+        Screen_1 = {
+            screen = Reactor_Screen_1,
+            X = Reactor_1_X,
+            Y = Reactor_1_Y,
+        },
+        Screen_2 = {
+            screen = Reactor_Screen_2,
+            X = Reactor_2_X,
+            Y = Reactor_2_Y,
+        },
+    }
+
+    CoolantScreens = {
+        Screen_1 = {
+            screen = Reactor_Coolant_Screen_1,
+            X = Reactor_Coolant_1_X,
+            Y = Reactor_Coolant_1_Y,
+        },
+        Screen_2 = {
+            screen = Reactor_Coolant_Screen_2,
+            X = Reactor_Coolant_2_X,
+            Y = Reactor_Coolant_2_Y,
+        },
+    }
     UIF.Clear(Mon)
     Mon.screen.setTextScale(1)
     GetReactorCardData(peripheral.wrap("left").getCardData())
