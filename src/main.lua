@@ -3,17 +3,10 @@ local VersionFile = fs.open("VERSION", "r")
 print("Loading program...")
 
 assert(http.get(VersionURL).readAll() == VersionFile.readAll(), "Outdated version, please run install.lua again")
---assert(peripheral.getType("right") == "monitor", "No Monitor!")
---assert(peripheral.getType("left") == "info_panel_advanced", "No Reactor Info!")
 assert(peripheral.find("modem"), "No Modem attached!")
 -- More checks
 
 print("Done!")
-
---ocal Modem = peripheral.find("modem")
---Modem.open(0) -- Broadcast
---Modem.open(1) -- Computer 1
---Modem.open(2) -- Computer 2
 
 local ReactorScreens = {}
 local CoolantScreens = {}
@@ -27,6 +20,7 @@ local TempBarColor = colors.green
 local RemainingColor = colors.green
 
 local ReactorCardData
+local CoolantCardData
 
 local UIF = require("UIFunctions")
 local Config = require("PerfConfig")
@@ -38,29 +32,35 @@ local ConvertNumber = function(str)
     return number
 end
 
+local SortCardData function(cardData, entrySize)
+    local sortedTables = {}
+    for i = 1, #cardData, entrySize do
+        local cardEntry = {}
+        if cardData[i] == "Out of Range" then
+            table.insert(cardEntry, "Out of Range")
+        else
+            for j = 0, entrySize - 1 do
+                table.insert(cardEntry, cardData[i + j])
+            end
+        end
+        table.insert(sortedTables, cardEntry)
+    end
+    return sortedTables
+end
+
 local GetReactorCardData = function()
-    print("test")
     rednet.broadcast("GetCardData")
-    print("test2")
         
     local ID, message = rednet.receive()
+    if not message then
+        print("Error: No message received!")
+        return
+    end
     print("Message Recieved!")
     local CardData = textutils.unserialize(message)
 
-    local sortedTables = {}
-    for i = 1, #CardData, 6 do
-        local cardData = {}
-        if CardData[i] == "Out of Range" then
-            table.insert(cardData, "Out of Range")
-        else
-            for j = 0, 5 do
-                table.insert(cardData, CardData[i + j])
-            end
-        end
-        table.insert(sortedTables, cardData)
-    end
-
-    ReactorCardData = sortedTables
+    ReactorCardData = SortCardData(CardData["Reactor"], 6)
+    CoolantCardData = SortCardData(CardData["Heat"], 6)
 end
 
 local StartReactor = function(event, x, y)
