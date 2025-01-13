@@ -164,36 +164,34 @@ Init()
 
 local Update = function()
     while true do
-        if ReactorCardData then
-            GetReactorCardData()
+        GetReactorCardData()
     
-            for i,v in pairs(ReactorCardData) do
-                if v[1] == "Out of Range" then
-                    UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
-                    return
-                elseif ConvertNumber(v[1]) >= 7500 then
-                    TempColor = colors.red
-                    TempBarColor = colors.red
-                elseif ConvertNumber(v[1]) >= 6500 then
-                    TempColor = colors.orange
-                    TempBarColor = colors.orange
-                elseif ConvertNumber(v[1]) >= 4000 then
-                    TempColor = colors.yellow
-                elseif ConvertNumber(v[1]) >= 2000 then
-                    TempColor = colors.lime
-                else
-                    TempColor = colors.green
-                    TempBarColor = colors.green
-                end
-        
-                if v[2] == "Off" then
-                    StatusColor = colors.red
-                else
-                    StatusColor = colors.lime
-                end
-        
-                DrawDynamicUI(i, v)
+        for i,v in pairs(ReactorCardData) do
+            if v[1] == "Out of Range" then
+                UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
+                return
+            elseif ConvertNumber(v[1]) >= 7500 then
+                TempColor = colors.red
+                TempBarColor = colors.red
+            elseif ConvertNumber(v[1]) >= 6500 then
+                TempColor = colors.orange
+                TempBarColor = colors.orange
+            elseif ConvertNumber(v[1]) >= 4000 then
+                TempColor = colors.yellow
+            elseif ConvertNumber(v[1]) >= 2000 then
+                TempColor = colors.lime
+            else
+                TempColor = colors.green
+                TempBarColor = colors.green
             end
+    
+            if v[2] == "Off" then
+                StatusColor = colors.red
+            else
+                StatusColor = colors.lime
+            end
+    
+            DrawDynamicUI(i, v)
         end
         sleep(0.1)
     end
