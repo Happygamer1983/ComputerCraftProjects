@@ -111,16 +111,16 @@ local Init = function()
     assert(peripheral.wrap(Config["Reactor_Screen_2"]), "Invalid Config [3]")
     assert(peripheral.wrap(Config["Reactor_Coolant_Screen_2"]), "Invalid Config [4]")
 
-    local Reactor_Screen_1 = peripheral.wrap(Config[1])
+    local Reactor_Screen_1 = peripheral.wrap(Config["Reactor_Screen_1"])
     local Reactor_1_X, Reactor_1_Y = Reactor_Screen_1.getSize()
 
-    local Reactor_Coolant_Screen_1 = peripheral.wrap(Config[2])
+    local Reactor_Coolant_Screen_1 = peripheral.wrap(Config["Reactor_Coolant_Screen_1"])
     local Reactor_Coolant_1_X, Reactor_Coolant_1_Y = Reactor_Coolant_Screen_1.getSize()
 
-    local Reactor_Screen_2 = peripheral.wrap(Config[3])
+    local Reactor_Screen_2 = peripheral.wrap(Config["Reactor_Screen_2"])
     local Reactor_2_X, Reactor_2_Y = Reactor_Screen_2.getSize()
 
-    local Reactor_Coolant_Screen_2 = peripheral.wrap(Config[4])
+    local Reactor_Coolant_Screen_2 = peripheral.wrap(Config["Reactor_Coolant_Screen_2"])
     local Reactor_Coolant_2_X, Reactor_Coolant_2_Y = Reactor_Coolant_Screen_2.getSize()
 
     ReactorScreens = {
@@ -148,9 +148,18 @@ local Init = function()
             Y = Reactor_Coolant_2_Y,
         },
     }
-    UIF.Clear(Mon)
-    Mon.screen.setTextScale(1)
-    GetReactorCardData(peripheral.wrap("left").getCardData())
+
+    for i,Mon in pairs(ReactorScreens) do
+        UIF.Clear(Mon)
+        Mon.screen.setTextScale(1)
+    end
+
+    for i,Mon in pairs(CoolantScreens) do
+        UIF.Clear(Mon)
+        Mon.screen.setTextScale(1)
+    end
+
+    GetReactorCardData()
 
     for i,v in pairs(ReactorCardData) do
         DrawDynamicUI(i, v)
