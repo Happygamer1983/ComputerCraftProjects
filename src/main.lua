@@ -39,7 +39,9 @@ local ConvertNumber = function(str)
 end
 
 local GetReactorCardData = function()
+    print("test")
     rednet.broadcast("GetCardData")
+    print("test2")
         
     local ID, message = rednet.receive()
     print("Message Recieved!")

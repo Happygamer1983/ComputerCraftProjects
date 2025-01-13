@@ -1,4 +1,3 @@
-
 rednet.open("bottom")
 
 local ID, message = rednet.receive()
