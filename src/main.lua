@@ -60,6 +60,10 @@ local GetReactorCardData = function()
         return
     end
 
+    for i, v in pairs(CardData) do
+        print(i,v)
+    end
+
     for i, v in pairs(ReactorScreens) do
         for _, screen in ipairs(CardData["Reactor"]) do
             print(screen.ScreenID, v.ScreenID)
@@ -174,7 +178,6 @@ local Update = function()
 
         for _, Screen in pairs(ReactorScreens) do
             local Mon = Screen
-            print(Screen.ScreenData)
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
                     if v[1] == "Out of Range" then
