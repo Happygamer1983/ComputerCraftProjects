@@ -41,7 +41,7 @@ end
 local GetReactorCardData = function()
     local GetReactorCardData = function()
         Modem.transmit(0, 0, "GetCardData")
-    
+        
         local event, side, channel, replyChannel, message = os.pullEvent("modem_message")
         if channel ~= 0 then return end
     
@@ -90,6 +90,7 @@ end
 
 local DrawDynamicUI = function(i, v)
     for i,Mon in pairs(ReactorScreens) do
+        UIF.Clear(Mon)
         UIF.DrawTextLeftRight(Mon, 2, 1, 0, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
 
         UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
@@ -159,17 +160,14 @@ local Init = function()
         Mon.screen.setTextScale(1)
     end
 
-    GetReactorCardData()
-
-    for i,v in pairs(ReactorCardData) do
-        DrawDynamicUI(i, v)
-    end
+    --for i,v in pairs(ReactorCardData) do
+    --    DrawDynamicUI(i, v)
+    --end
 end
 Init()
 
 local Update = function()
     while true do
-        UIF.Clear(Mon)
         if ReactorCardData then
             GetReactorCardData()
     
