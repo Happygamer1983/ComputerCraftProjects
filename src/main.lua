@@ -32,7 +32,7 @@ local ConvertNumber = function(str)
     return number
 end
 
-local SortCardData function(cardData, entrySize)
+local SortCardData = function(cardData, entrySize)
     local sortedTables = {}
     for i = 1, #cardData, entrySize do
         local cardEntry = {}
@@ -57,7 +57,11 @@ local GetReactorCardData = function()
         return
     end
     print("Message Recieved!")
-    local CardData = textutils.unserialize(message)
+    local success, CardData = pcall(textutils.unserialize, message)
+    if not success or not CardData then
+        print("Error: Failed to parse card data!")
+        return
+    end
 
     ReactorCardData = SortCardData(CardData["Reactor"], 6)
     CoolantCardData = SortCardData(CardData["Heat"], 6)
