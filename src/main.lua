@@ -34,7 +34,7 @@ local SortCardData = function(cardData, entrySize)
     local sortedTables = {}
     for i = 1, #cardData, entrySize do
         local cardEntry = {}
-        if cardData[i] == "Out of Range" then
+        if cardData[i] == "Out of Range" or cardData[i] == "Error getting Heat Card Data" then
             table.insert(cardEntry, "Out of Range")
         else
             for j = 0, entrySize - 1 do
@@ -48,6 +48,7 @@ end
 
 local GetReactorCardData = function()
     rednet.broadcast("GetCardData")
+    UpdatingTick = true
         
     local ID, message = rednet.receive()
     if not message then
@@ -60,6 +61,7 @@ local GetReactorCardData = function()
         print("Error: Failed to parse card data!")
         return
     end
+    UpdatingTick = false
 
     for i, Screen in pairs(ReactorScreens) do
         local ReactorData = CardData["Reactor"]
@@ -76,12 +78,28 @@ local GetReactorCardData = function()
     end
 end
 
+local SetBundleState = function(side, color, state)
+    if (type(side) == "string") and (type(color) == "string") and (type(state) == "boolean") then
+        if state == true then
+            rs.setBundledOutput(side, colors.combine(rs.getBundledOutput(side), colors[color]))
+        elseif state == false then
+            rs.setBundledOutput(side, colors.subtract(rs.getBundledOutput(side), colors[color]))
+        end
+    end
+end
+
 local StartReactor = function(event, x, y)
-    rs.setBundledOutput("back", colors.black)
+    SetBundleState("back", "black", true)
 end
 
 local ShutdownReactor = function(event, x, y)
-    rs.setBundledOutput("back", 0)
+    SetBundleState("back", "black", false)
+end
+
+local CheckReactorState = function(ReactorData, CoolantData)
+    if ConvertNumber(v[1]) >= 8000 then
+        ShutdownReactor()
+    end
 end
 
 local Init = function()
@@ -156,13 +174,24 @@ end
 Init()
 
 --[[
-    CardInfo = {
+    Reactor Info:
+    {
     [1] = temp          (number)
     [2] = on/off        (string)
     [3] = max heat      (number)
     [4] = meltdown temp (number)
     [5] = EU/t output   (number)
     [6] = remaining     (string)
+    }
+
+    Coolant Info:
+    {
+    [1] = Output (hU/t) (number)
+    [2] = on/off        (string)
+    [3] = Buffer (HU)   (number)
+    [4] = Storage (EU)  (number)
+    [5] = Capacity (EU) (number)
+    [6] = Coils         (string)
     }
 ]]
 
@@ -173,6 +202,7 @@ local Update = function()
         for _, Screen in pairs(ReactorScreens) do
             local Mon = Screen
             if Screen.ScreenData then
+                CheckReactorState(Screen.ScreenData)
                 for i, v in pairs(Screen.ScreenData) do
                     if v[1] == "Out of Range" then
                         UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
