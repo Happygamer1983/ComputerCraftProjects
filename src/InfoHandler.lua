@@ -34,5 +34,5 @@ while true do
     CardData["Heat"] = {Data = HeatData, ScreenID = ScreenID}
     CardData["Reactor"] = {Data = ReactorData, ScreenID = ScreenID}
     rednet.send(ID, textutils.serialize(CardData))
-    sleep()
+    sleep(0.1)
 end

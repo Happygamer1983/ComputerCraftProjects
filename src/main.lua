@@ -7,18 +7,13 @@ assert(peripheral.find("modem"), "No Modem attached!")
 -- More checks
 
 print("Done!")
-local UpdatingTick = false
+local UpdatingTick = 0
 
 local ReactorScreens = {}
 local CoolantScreens = {}
 
 local DefaultTextColor = colors.white
 local DefaultBackgroundColor = colors.black
-
-local StatusColor = colors.red
-local TempColor = colors.green
-local TempBarColor = colors.green
-local RemainingColor = colors.green
 
 local UIF = require("UIFunctions")
 local Config = require("PerfConfig")
@@ -86,18 +81,27 @@ local SetBundleState = function(side, color, state)
     end
 end
 
-local StartReactor = function(event, x, y)
+local StartReactor_1 = function(event, x, y)
     SetBundleState("back", "black", true)
 end
 
-local ShutdownReactor = function(event, x, y)
+local ShutdownReactor_1 = function(event, x, y)
     SetBundleState("back", "black", false)
+end
+
+local StartReactor_2 = function(event, x, y)
+    SetBundleState("back", "gray", true)
+end
+
+local ShutdownReactor_2 = function(event, x, y)
+    SetBundleState("back", "gray", false)
 end
 
 local CheckReactorState = function(ReactorData, CoolantData)
     for i,v in pairs(ReactorData) do
         if ConvertNumber(v[1]) >= 8000 then
-            ShutdownReactor()
+            ShutdownReactor_1()
+            ShutdownReactor_2()
         end
     end
 end
@@ -173,36 +177,40 @@ local Init = function()
 end
 Init()
 
---[[
-    Reactor Info:
-    {
-    [1] = temp          (number)
-    [2] = on/off        (string)
-    [3] = max heat      (number)
-    [4] = meltdown temp (number)
-    [5] = EU/t output   (number)
-    [6] = remaining     (string)
-    }
-
-    Coolant Info:
-    {
-    [1] = Output (hU/t) (number)
-    [2] = on/off        (string)
-    [3] = Buffer (HU)   (number)
-    [4] = Storage (EU)  (number)
-    [5] = Capacity (EU) (number)
-    [6] = Coils         (string)
-    }
-]]
-
 local Update = function()
+    coroutine.wrap(function()
+        while true do
+            for i = 0, 3 do
+                local dots = string.rep(".", i) -- Create a string with i dots
+                print("Running" .. dots)
+                wait(0.5) -- Adjust the speed as needed
+            end
+        end
+    end)()
+
     while true do
         GetReactorCardData()
 
+        --[[
+            Reactor Info:
+            [1] = temp          (number)
+            [2] = on/off        (string)
+            [3] = max heat      (number)
+            [4] = meltdown temp (number)
+            [5] = EU/t output   (number)
+            [6] = remaining     (string)
+        ]]
         for _, Screen in pairs(ReactorScreens) do
             local Mon = Screen
+            UIF.Clear(Mon)
+
+            local StatusColor = colors.red
+            local TempColor = colors.green
+            local TempBarColor = colors.green
+            local RemainingColor = colors.green
+
             if Screen.ScreenData then
-                CheckReactorState(Screen.ScreenData)
+                --CheckReactorState(Screen.ScreenData)
                 for i, v in pairs(Screen.ScreenData) do
                     if v[1] == "Out of Range" then
                         UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
@@ -227,9 +235,8 @@ local Update = function()
                     else
                         StatusColor = colors.lime
                     end
-            
-                    UIF.Clear(Mon)
-                    UIF.DrawTextLeftRight(Mon, 2, 1, 0, "Reactor Status ["..i.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
+
+                    UIF.DrawTextLeftRight(Mon, 2, 1, 0, "Reactor Status ["..Mon.ScreenID.."]", v[2], DefaultTextColor, StatusColor, DefaultBackgroundColor)
             
                     UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
                     UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
@@ -239,29 +246,41 @@ local Update = function()
                 
                     UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
                 
-                    UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor)
-                    UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
-
-                    if UpdatingTick then
-                        UpdatingTick = false
-                        SetBundleState("back", "red", true)
-                    else
-                        UpdatingTick = true
-                        SetBundleState("back", "red", false)
-                    end
+                    UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor_1)
+                    UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor_1)
                 end
             end  
         end
 
-        
+        --[[
+            Coolant Info:
+            [1] = Output (hU/t) (number)
+            [2] = on/off        (string)
+            [3] = Buffer (HU)   (number)
+            [4] = Storage (EU)  (number)
+            [5] = Capacity (EU) (number)
+            [6] = Coils         (string)
+        ]]
         for _, Screen in pairs(CoolantScreens) do
             local Mon = Screen
+            UIF.Clear(Mon)
 
-            --for i, v in pairs(Screen.ScreenData) do
-            --    if Screen.ScreenData then
-                    --TODO Add Coolant Info
-            --    end
-            --end
+            local StatusColor = colors.red
+            local TempColor = colors.green
+            local TempBarColor = colors.green
+            local RemainingColor = colors.green
+
+            for i, v in pairs(Screen.ScreenData) do
+                if Screen.ScreenData then
+                    for i, v in pairs(Screen.ScreenData) do
+                        --TODO Add coloring
+
+                        UIF.DrawText(Mon, 2, 1, "Reactor Coolant Status ["..Mon.ScreenID.."]", DefaultTextColor, DefaultBackgroundColor)
+
+                        UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Coolant Heat Output:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
+                    end
+                end
+            end
         end
         sleep(0.1)
     end
