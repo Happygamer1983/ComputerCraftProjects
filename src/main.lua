@@ -178,16 +178,6 @@ end
 Init()
 
 local Update = function()
-    coroutine.wrap(function()
-        while true do
-            for i = 0, 3 do
-                local dots = string.rep(".", i) -- Create a string with i dots
-                print("Running" .. dots)
-                sleep(0.5) -- Adjust the speed as needed
-            end
-        end
-    end)()
-
     while true do
         GetReactorCardData()
 
@@ -252,23 +242,38 @@ local Update = function()
             end  
         end
 
+        -- Heat Gen Card + Advanced Fluid Card
         --[[
             Coolant Info:
-            [1] = Output (hU/t) (number)
-            [2] = on/off        (string)
-            [3] = Buffer (HU)   (number)
-            [4] = Storage (EU)  (number)
-            [5] = Capacity (EU) (number)
-            [6] = Coils         (string)
+            [1] = Output (hU/t)
+            [2] = on/off
+            [3] = Buffer (HU)
+            [4] = Storage (EU)
+            [5] = Capacity (EU)
+            [6] = Coils
+
+            [With Heat Card][Without] = ...
+            -- Cool Coolant
+            [7][1] = Name (Coolant name)
+            [8][2] = Amount (mB)
+            [9][3] = Free (mB)
+            [10][4] = Capacity (mB)
+            [11][5] = Fill (%)
+
+            -- Hot Coolant
+            [12][6] = Name (Coolant name)
+            [13][7] = Amount (mB)
+            [14][8] = Free (mB)
+            [15][9] = Capacity (mB)
+            [16][10] = Fill
         ]]
         for _, Screen in pairs(CoolantScreens) do
             local Mon = Screen
             UIF.Clear(Mon)
 
             local StatusColor = colors.red
-            local TempColor = colors.green
-            local TempBarColor = colors.green
-            local RemainingColor = colors.green
+            local CoolantAmount = colors.green
+
 
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
@@ -276,7 +281,12 @@ local Update = function()
 
                     UIF.DrawText(Mon, 2, 1, "Reactor Coolant Status ["..Mon.ScreenID.."]", DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Coolant Heat Output:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
+                    UIF.DrawText(Mon, 0, 2, UIF.LineBreakText(Mon, " Cool Coolant "), DefaultTextColor, DefaultBackgroundColor)
+
+                    UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Coolant Amount:", v[1].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Coolant Fill Stand:", v[5].." %", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+
+                    UIF.DrawText(Mon, 0, 8, UIF.LineBreakText(Mon, " Hot Coolant "), DefaultTextColor, DefaultBackgroundColor)
                 end
             end
         end

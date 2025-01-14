@@ -29,6 +29,12 @@ function UIF.FormatNum(number)
     return minus .. int .. fraction
 end
 
+function UIF.LineBreakText(Mon, Text)
+    local lineWidth = Mon.X 
+    local padding = math.floor((lineWidth - #Text) / 2)
+    return string.rep("-", padding) .. Text .. string.rep("-", lineWidth - #Text - padding)
+end
+
 function UIF.DrawText(Mon, x, y, text, text_color, background_color)
     Mon.screen.setBackgroundColor(background_color)
     Mon.screen.setTextColor(text_color)
