@@ -243,9 +243,9 @@ local Update = function()
                     UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
 
                     if UpdatingTick then
-                        UIF.DrawText(Mon, 1, Mon.Y - 1, ".", colors.gray, DefaultBackgroundColor)
+                        SetBundleState("back", "red", true)
                     else
-                        UIF.DrawText(Mon, 20, 12, "", colors.gray, DefaultBackgroundColor)
+                        SetBundleState("back", "red", false)
                     end
                 end
             end  
