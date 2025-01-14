@@ -66,7 +66,7 @@ local GetReactorCardData = function()
     for i, Screen in pairs(CoolantScreens) do
         local HeatData = CardData["Heat"]
         if tonumber(HeatData.ScreenID) == tonumber(Screen.ScreenID) then
-            Screen.ScreenData = SortCardData(HeatData.Data, 6)
+            Screen.ScreenData = SortCardData(HeatData.Data, 10)
         end
     end
 end
