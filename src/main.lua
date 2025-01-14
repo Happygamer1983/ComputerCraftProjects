@@ -183,7 +183,7 @@ local Update = function()
             for i = 0, 3 do
                 local dots = string.rep(".", i) -- Create a string with i dots
                 print("Running" .. dots)
-                wait(0.5) -- Adjust the speed as needed
+                sleep(0.5) -- Adjust the speed as needed
             end
         end
     end)()
@@ -269,6 +269,10 @@ local Update = function()
             local TempColor = colors.green
             local TempBarColor = colors.green
             local RemainingColor = colors.green
+
+            for i,v in pairs(Screen) do
+                print(i,v)
+            end
 
             for i, v in pairs(Screen.ScreenData) do
                 if Screen.ScreenData then
