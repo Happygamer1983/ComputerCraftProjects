@@ -48,7 +48,6 @@ end
 
 local GetReactorCardData = function()
     rednet.broadcast("GetCardData")
-    UpdatingTick = true
         
     local ID, message = rednet.receive()
     if not message then
@@ -61,7 +60,6 @@ local GetReactorCardData = function()
         print("Error: Failed to parse card data!")
         return
     end
-    UpdatingTick = false
 
     for i, Screen in pairs(ReactorScreens) do
         local ReactorData = CardData["Reactor"]
@@ -97,8 +95,10 @@ local ShutdownReactor = function(event, x, y)
 end
 
 local CheckReactorState = function(ReactorData, CoolantData)
-    if ConvertNumber(v[1]) >= 8000 then
-        ShutdownReactor()
+    for i,v in pairs(ReactorData) do
+        if ConvertNumber(v[1]) >= 8000 then
+            ShutdownReactor()
+        end
     end
 end
 
@@ -243,8 +243,10 @@ local Update = function()
                     UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor)
 
                     if UpdatingTick then
+                        UpdatingTick = false
                         SetBundleState("back", "red", true)
                     else
+                        UpdatingTick = true
                         SetBundleState("back", "red", false)
                     end
                 end
