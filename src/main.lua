@@ -273,6 +273,7 @@ local Update = function()
 
             local StatusColor = colors.red
             local CoolantAmount = colors.green
+            local HotCoolantAmount = colors.green
 
 
             if Screen.ScreenData then
