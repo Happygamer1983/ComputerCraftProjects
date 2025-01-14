@@ -289,8 +289,8 @@ local Update = function()
 
                     UIF.DrawText(Mon, 0, 7, UIF.LineBreakText(Mon, " Hot Coolant "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 4, 0, "Coolant Amount:", v[7].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Coolant Fill Stand:", v[10].." %", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[7].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 10, 0, "Coolant Fill Stand:", v[10].." %", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
                 end
             end
         end
