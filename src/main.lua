@@ -282,12 +282,15 @@ local Update = function()
 
                     UIF.DrawText(Mon, 2, 1, "Reactor Coolant Status ["..Mon.ScreenID.."]", DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawText(Mon, 0, 2, UIF.LineBreakText(Mon, " Cool Coolant "), DefaultTextColor, DefaultBackgroundColor)
+                    UIF.DrawText(Mon, 0, 3, UIF.LineBreakText(Mon, " Cool Coolant "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Coolant Amount:", v[1].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Coolant Fill Stand:", v[5].." %", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 4, 0, "Coolant Amount:", v[2].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Coolant Fill Stand:", v[5].." %", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
 
-                    UIF.DrawText(Mon, 0, 8, UIF.LineBreakText(Mon, " Hot Coolant "), DefaultTextColor, DefaultBackgroundColor)
+                    UIF.DrawText(Mon, 0, 7, UIF.LineBreakText(Mon, " Hot Coolant "), DefaultTextColor, DefaultBackgroundColor)
+
+                    UIF.DrawTextLeftRight(Mon, 2, 4, 0, "Coolant Amount:", v[7].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Coolant Fill Stand:", v[10].." %", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
                 end
             end
         end
