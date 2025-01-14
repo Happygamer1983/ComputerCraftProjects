@@ -50,7 +50,7 @@ local GetReactorCardData = function()
         return
     end
 
-    local success, CardData = pcall(textutils.unserialize, message)
+    local success, CardData = pcall(textutils.unserializeJSON, message)
     if not success or not CardData then
         print("Error: Failed to parse card data!")
         return
@@ -279,10 +279,6 @@ local Update = function()
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
                     --TODO Add coloring
-
-                    for it,val in pairs(v) do
-                        print(it,val)
-                    end
 
                     UIF.DrawText(Mon, 2, 1, "Reactor Coolant Status ["..Mon.ScreenID.."]", DefaultTextColor, DefaultBackgroundColor)
 

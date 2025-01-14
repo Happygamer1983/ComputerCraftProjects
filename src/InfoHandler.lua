@@ -17,6 +17,7 @@ while true do
     
     local success, fail = pcall(function()
         HeatData = HeatCard.getCardData()
+        HeatData[6] = ""
     end)
     
     if not success then
@@ -33,6 +34,6 @@ while true do
     
     CardData["Heat"] = {Data = HeatData, ScreenID = ScreenID}
     CardData["Reactor"] = {Data = ReactorData, ScreenID = ScreenID}
-    rednet.send(ID, textutils.serialize(CardData))
+    rednet.send(ID, textutils.serializeJSON(CardData))
     sleep(0.1)
 end
