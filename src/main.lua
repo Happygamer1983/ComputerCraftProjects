@@ -270,19 +270,13 @@ local Update = function()
             local TempBarColor = colors.green
             local RemainingColor = colors.green
 
-            for i,v in pairs(Screen) do
-                print(i,v)
-            end
+            if Screen.ScreenData then
+                for i, v in pairs(Screen.ScreenData) do
+                    --TODO Add coloring
 
-            for i, v in pairs(Screen.ScreenData) do
-                if Screen.ScreenData then
-                    for i, v in pairs(Screen.ScreenData) do
-                        --TODO Add coloring
+                    UIF.DrawText(Mon, 2, 1, "Reactor Coolant Status ["..Mon.ScreenID.."]", DefaultTextColor, DefaultBackgroundColor)
 
-                        UIF.DrawText(Mon, 2, 1, "Reactor Coolant Status ["..Mon.ScreenID.."]", DefaultTextColor, DefaultBackgroundColor)
-
-                        UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Coolant Heat Output:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
-                    end
+                    UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Coolant Heat Output:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
                 end
             end
         end
