@@ -230,7 +230,7 @@ local Update = function()
                     UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
                 
                     UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." hU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
-                    UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
+                    UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 35000, colors.green, colors.gray)
                 
                     UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
                 
