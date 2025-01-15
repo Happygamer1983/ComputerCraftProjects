@@ -183,12 +183,12 @@ local Update = function()
 
         --[[
             Reactor Info:
-            [1] = temp          (number)
-            [2] = on/off        (string)
-            [3] = max heat      (number)
-            [4] = meltdown temp (number)
-            [5] = EU/t output   (number)
-            [6] = remaining     (string)
+            [1] = temp
+            [2] = on/off
+            [3] = max heat
+            [4] = meltdown temp
+            [5] = hU/t output (Fluid Reactor)
+            [6] = remaining
         ]]
         for _, Screen in pairs(ReactorScreens) do
             local Mon = Screen
@@ -204,7 +204,7 @@ local Update = function()
                     if ConvertNumber(v[1]) >= 7500 then
                         TempColor = colors.red
                         TempBarColor = colors.red
-                        ShutdownReactor_1()
+                        ShutdownReactor_1() --TODO add shutdown for option for both or only effected one
                         ShutdownReactor_2()
                     elseif ConvertNumber(v[1]) >= 6500 then
                         TempColor = colors.orange
@@ -229,7 +229,7 @@ local Update = function()
                     UIF.DrawTextLeftRight(Mon, 2, 3, 0, "Reactor Temperature:", v[1].." °C", DefaultTextColor, TempColor, DefaultBackgroundColor)
                     UIF.ProgressBar(Mon, 2, 4, Mon.X - 2, ConvertNumber(v[1]), ConvertNumber(v[3]), TempBarColor, colors.gray)
                 
-                    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." EU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Reactor Output:", v[5].." hU/t", DefaultTextColor, colors.white, DefaultBackgroundColor)
                     UIF.ProgressBar(Mon, 2, 7, Mon.X - 2, ConvertNumber(v[5]), 6960, colors.green, colors.gray)
                 
                     UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
@@ -278,11 +278,14 @@ local Update = function()
 
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
-                    --TODO Add coloring
-                    if ConvertNumber(v[5]) >= 75 then
-                        CoolantFill = colors.orange
-                    elseif ConvertNumber(v[5]) >= 50 then
+                    if ConvertNumber(v[5]) <= 20 then
                         CoolantFill = colors.red
+                        ShutdownReactor_1() --TODO add shutdown for option for both or only effected one
+                        ShutdownReactor_2()
+                    elseif ConvertNumber(v[5]) <= 50 then
+                        CoolantFill = colors.red
+                    elseif ConvertNumber(v[5]) <= 75 then
+                        CoolantFill = colors.orange
                     else
                         CoolantFill = colors.green
                     end
