@@ -200,14 +200,12 @@ local Update = function()
             local RemainingColor = colors.green
 
             if Screen.ScreenData then
-                --CheckReactorState(Screen.ScreenData)
                 for i, v in pairs(Screen.ScreenData) do
-                    if v[1] == "Out of Range" then
-                        UIF.DrawText(Mon, 2, 1, "Out of Range", colors.red, DefaultBackgroundColor)
-                        return
-                    elseif ConvertNumber(v[1]) >= 7500 then
+                    if ConvertNumber(v[1]) >= 7500 then
                         TempColor = colors.red
                         TempBarColor = colors.red
+                        ShutdownReactor_1()
+                        ShutdownReactor_2()
                     elseif ConvertNumber(v[1]) >= 6500 then
                         TempColor = colors.orange
                         TempBarColor = colors.orange
@@ -273,24 +271,47 @@ local Update = function()
 
             local StatusColor = colors.red
             local CoolantAmount = colors.green
+            local CoolantFill = colors.green
             local HotCoolantAmount = colors.green
+            local HotCoolantFill = colors.green
 
 
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
                     --TODO Add coloring
+                    if ConvertNumber(v[5]) >= 75 then
+                        CoolantFill = colors.orange
+                    elseif ConvertNumber(v[5]) >= 50 then
+                        CoolantFill = colors.red
+                    else
+                        CoolantFill = colors.green
+                    end
+
+                    if ConvertNumber(v[7]) >= 4000 then
+                        HotCoolantAmount = colors.red
+                        HotCoolantFill = colors.red
+                    elseif ConvertNumber(v[7]) >= 2000 then
+                        HotCoolantAmount = colors.orange
+                        HotCoolantFill = colors.orange
+                    elseif ConvertNumber(v[7]) >= 1000 then
+                        HotCoolantAmount = colors.yellow
+                        HotCoolantFill = colors.yellow
+                    else
+                        HotCoolantAmount = colors.green
+                        HotCoolantFill = colors.green
+                    end
 
                     UIF.DrawText(Mon, 2, 1, "Reactor Coolant Status ["..Mon.ScreenID.."]", DefaultTextColor, DefaultBackgroundColor)
 
                     UIF.DrawText(Mon, 0, 3, UIF.LineBreakText(Mon, " Cool Coolant "), DefaultTextColor, DefaultBackgroundColor)
 
                     UIF.DrawTextLeftRight(Mon, 2, 4, 0, "Coolant Amount:", v[2].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Coolant Fill Stand:", v[5].." %", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Coolant Fill Stand:", v[5].." %", DefaultTextColor, CoolantFill, DefaultBackgroundColor)
 
                     UIF.DrawText(Mon, 0, 7, UIF.LineBreakText(Mon, " Hot Coolant "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[7].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 10, 0, "Coolant Fill Stand:", v[10].." %", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[7].." mB", DefaultTextColor, HotCoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[10].." %", DefaultTextColor, HotCoolantFill, DefaultBackgroundColor)
                 end
             end
         end
