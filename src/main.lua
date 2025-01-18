@@ -22,7 +22,6 @@ local expect = require "cc.expect"
 local expect, field = expect.expect, expect.field
 
 local ConvertNumber = function(str)
-    print(str)
     local success, result = pcall(function()
         expect(1, str, "string")
     end)

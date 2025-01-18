@@ -17,7 +17,6 @@ while true do
     
     local success, fail = pcall(function()
         HeatData = HeatCard.getCardData()
-        HeatData[6] = ""
     end)
     
     if not success then
