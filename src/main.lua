@@ -260,18 +260,18 @@ local Update = function()
         -- Heat Gen Card + Advanced Fluid Card
         --[[
             Coolant Info:
-            [1] = Name (Coolant name)
-            [2] = Amount (mB)
-            [3] = Free (mB)
-            [4] = Capacity (mB)
-            [5] = Fill (%)
+            [-] = Name (Coolant name) -- REMOVED (Causes Java Error on server)
+            [1] = Amount (mB)
+            [2] = Free (mB)
+            [3] = Capacity (mB)
+            [4] = Fill (%)
 
             -- Hot Coolant
-            [6] = Name (Coolant name)
-            [7] = Amount (mB)
-            [8] = Free (mB)
-            [9] = Capacity (mB)
-            [10] = Fill
+            [-] = Name (Coolant name) -- REMOVED (Causes Java Error on server)
+            [5] = Amount (mB)
+            [6] = Free (mB)
+            [7] = Capacity (mB)
+            [8] = Fill
         ]]
         for _, Screen in pairs(CoolantScreens) do
             local Mon = Screen
@@ -286,25 +286,25 @@ local Update = function()
 
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
-                    if ConvertNumber(v[5]) <= 20 then
+                    if ConvertNumber(v[4]) <= 20 then
                         CoolantFill = colors.red
                         ShutdownReactor_1() --TODO add shutdown for option for both or only effected one
                         ShutdownReactor_2()
-                    elseif ConvertNumber(v[5]) <= 50 then
+                    elseif ConvertNumber(v[4]) <= 50 then
                         CoolantFill = colors.red
-                    elseif ConvertNumber(v[5]) <= 75 then
+                    elseif ConvertNumber(v[4]) <= 75 then
                         CoolantFill = colors.orange
                     else
                         CoolantFill = colors.green
                     end
 
-                    if ConvertNumber(v[7]) >= 4000 then
+                    if ConvertNumber(v[5]) >= 4000 then
                         HotCoolantAmount = colors.red
                         HotCoolantFill = colors.red
-                    elseif ConvertNumber(v[7]) >= 2000 then
+                    elseif ConvertNumber(v[5]) >= 2000 then
                         HotCoolantAmount = colors.orange
                         HotCoolantFill = colors.orange
-                    elseif ConvertNumber(v[7]) >= 1000 then
+                    elseif ConvertNumber(v[5]) >= 1000 then
                         HotCoolantAmount = colors.yellow
                         HotCoolantFill = colors.yellow
                     else
@@ -316,13 +316,13 @@ local Update = function()
 
                     UIF.DrawText(Mon, 0, 3, UIF.LineBreakText(Mon, " Cool Coolant "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 4, 0, "Coolant Amount:", v[2].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Coolant Fill Stand:", v[5].." %", DefaultTextColor, CoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 4, 0, "Coolant Amount:", v[1].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Coolant Fill Stand:", v[4].." %", DefaultTextColor, CoolantFill, DefaultBackgroundColor)
 
                     UIF.DrawText(Mon, 0, 7, UIF.LineBreakText(Mon, " Hot Coolant "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[7].." mB", DefaultTextColor, HotCoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[10].." %", DefaultTextColor, HotCoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[5].." mB", DefaultTextColor, HotCoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[8].." %", DefaultTextColor, HotCoolantFill, DefaultBackgroundColor)
                 end
             end
         end
