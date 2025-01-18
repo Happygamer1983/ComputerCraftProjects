@@ -20,9 +20,15 @@ local Config = require("PerfConfig")
 local Taskmaster = require("taskmaster")()
 
 local ConvertNumber = function(str)
-    local cleanedStr = string.gsub(str, "%s", "")
-    local number = tonumber(cleanedStr)
-    return number
+    local success, error = pcall(function()
+        local cleanedStr = string.gsub(str, "%s", "")
+        local number = tonumber(cleanedStr)
+        return number
+    end)
+    if not success then
+        print(error)
+        return 1
+    end
 end
 
 local SortCardData = function(cardData, entrySize)
@@ -243,27 +249,18 @@ local Update = function()
         -- Heat Gen Card + Advanced Fluid Card
         --[[
             Coolant Info:
-            [1] = Output (hU/t)
-            [2] = on/off
-            [3] = Buffer (HU)
-            [4] = Storage (EU)
-            [5] = Capacity (EU)
-            [6] = Coils
-
-            [With Heat Card][Without] = ...
-            -- Cool Coolant
-            [7][1] = Name (Coolant name)
-            [8][2] = Amount (mB)
-            [9][3] = Free (mB)
-            [10][4] = Capacity (mB)
-            [11][5] = Fill (%)
+            [1] = Name (Coolant name)
+            [2] = Amount (mB)
+            [3] = Free (mB)
+            [4] = Capacity (mB)
+            [5] = Fill (%)
 
             -- Hot Coolant
-            [12][6] = Name (Coolant name)
-            [13][7] = Amount (mB)
-            [14][8] = Free (mB)
-            [15][9] = Capacity (mB)
-            [16][10] = Fill
+            [6] = Name (Coolant name)
+            [7] = Amount (mB)
+            [8] = Free (mB)
+            [9] = Capacity (mB)
+            [10] = Fill
         ]]
         for _, Screen in pairs(CoolantScreens) do
             local Mon = Screen
