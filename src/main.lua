@@ -22,17 +22,25 @@ local expect = require "cc.expect"
 local expect, field = expect.expect, expect.field
 
 local ConvertNumber = function(str)
-    local s,f = pcall(function()
+    print(str)
+    local success, result = pcall(function()
         expect(1, str, "string")
     end)
-    if s then
-        local cleanedStr = string.gsub(str, "%s", "")
-        local number = tonumber(cleanedStr)
-        return number
-    else
-        return tonumber(str)
+
+    if not success then
+        return str
     end
+
+    local cleanedStr = string.gsub(str, "%s", "")
+    local number = tonumber(cleanedStr)
+
+    if number then
+        return number
+    end
+
+    return str
 end
+
 
 local SortCardData = function(cardData, entrySize)
     local sortedTables = {}
