@@ -27,7 +27,7 @@ local ConvertNumber = function(str)
     end)
     if not success then
         print(error)
-        return 1
+        return 1 
     end
 end
 
