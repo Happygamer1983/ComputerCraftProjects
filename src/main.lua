@@ -18,17 +18,13 @@ local DefaultBackgroundColor = colors.black
 local UIF = require("UIFunctions")
 local Config = require("PerfConfig")
 local Taskmaster = require("taskmaster")()
+local expect = require "cc.expect"
 
 local ConvertNumber = function(str)
-    local success, error = pcall(function()
-        local cleanedStr = string.gsub(str, "%s", "")
-        local number = tonumber(cleanedStr)
-        return number
-    end)
-    if not success then
-        print(error)
-        return 1 
-    end
+    expect(1, str, "string")
+    local cleanedStr = string.gsub(str, "%s", "")
+    local number = tonumber(cleanedStr)
+    return number
 end
 
 local SortCardData = function(cardData, entrySize)
