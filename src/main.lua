@@ -113,13 +113,26 @@ local ShutdownReactor_2 = function(event, x, y)
     SetBundleState("back", "gray", false)
 end
 
-local CheckReactorState = function(ReactorData, CoolantData)
-    for i,v in pairs(ReactorData) do
-        if ConvertNumber(v[1]) >= 8000 then
-            ShutdownReactor_1()
-            ShutdownReactor_2()
+local TempServerWarn = function()
+    coroutine.wrap(function()
+        while true do
+            SetBundleState("back", "orange", true)
+            sleep(1)
         end
-    end
+    end)() 
+end
+
+local CoolantServerWarn = function()
+    coroutine.wrap(function()
+        while true do
+            SetBundleState("back", "red", true)
+            sleep(1)
+        end
+    end)() 
+end
+
+local EmergencyShutdown = function()
+    SetBundleState("back", "yellow", true)
 end
 
 local Init = function()
@@ -220,11 +233,11 @@ local Update = function()
                     if ConvertNumber(v[1]) >= 7500 then
                         TempColor = colors.red
                         TempBarColor = colors.red
-                        ShutdownReactor_1() --TODO add shutdown for option for both or only effected one
-                        ShutdownReactor_2()
+                        EmergencyShutdown()
                     elseif ConvertNumber(v[1]) >= 6500 then
                         TempColor = colors.orange
                         TempBarColor = colors.orange
+                        TempServerWarn()
                     elseif ConvertNumber(v[1]) >= 4000 then
                         TempColor = colors.yellow
                     elseif ConvertNumber(v[1]) >= 2000 then
@@ -287,8 +300,7 @@ local Update = function()
                 for i, v in pairs(Screen.ScreenData) do
                     if ConvertNumber(v[4]) <= 20 then
                         CoolantFill = colors.red
-                        ShutdownReactor_1() --TODO add shutdown for option for both or only effected one
-                        ShutdownReactor_2()
+                        EmergencyShutdown()
                     elseif ConvertNumber(v[4]) <= 50 then
                         CoolantFill = colors.red
                     elseif ConvertNumber(v[4]) <= 75 then
