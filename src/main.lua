@@ -274,7 +274,7 @@ local Update = function()
                     UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Fuel Time Left:", v[6], DefaultTextColor, colors.white, DefaultBackgroundColor)
                 
                     UIF.NewButton(Mon, 2, 12, 2, "Start Reactor", colors.white, colors.gray, StartReactor_1)
-                    UIF.NewButton(Mon, 20, 12, 2, "Shutdown", colors.white, colors.gray, ShutdownReactor_1)
+                    UIF.NewButton(Mon, 21, 12, 2, "Shutdown Reactor", colors.white, colors.gray, ShutdownReactor_1)
                 end
             end  
         end
