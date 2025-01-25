@@ -406,8 +406,8 @@ local Update = function()
                     UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[8].." %", DefaultTextColor, HECoolant, DefaultBackgroundColor)
 
 
-                    FPCoolant = CheckBiggerThanFill(v, 12, true)
-                    FPHotCoolant = CheckSmallerThanFill(v, 16, true)
+                    FPCoolant = CheckSmallerThanFill(v, 12, true)
+                    FPHotCoolant = CheckBiggerThanFill(v, 16, true)
 
                     UIF.DrawText(Mon, 0, 11, UIF.LineBreakText(Mon, " Fluid Port Info "), DefaultTextColor, DefaultBackgroundColor)
 
