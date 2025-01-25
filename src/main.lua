@@ -312,56 +312,83 @@ local Update = function()
             [16] = Fill
         ]]
 
-        local HotCoolantAmount = colors.green
-        local HotCoolantFill = colors.green
-        local CoolantAmount = colors.green
-        local CoolantFill = colors.green
-
-        local CheckCoolantAmount = function(v, index, comparison)
+        local CheckBiggerThanAmount = function(v, index, CanShutdown)
             local ConvertedNumber = ConvertNumber(v[index])
 
-            if comparison == ">" then
-                if ConvertedNumber >= 4000 then
-                    HotCoolantAmount, HotCoolantFill = colors.red, colors.red
+            if ConvertedNumber >= 5000 then
+                if CanShutdown then
                     EmergencyShutdown()
-                elseif ConvertedNumber >= 2000 then
-                    HotCoolantAmount, HotCoolantFill = colors.orange, colors.orange
-                elseif ConvertedNumber >= 1000 then
-                    HotCoolantAmount, HotCoolantFill = colors.yellow, colors.yellow
-                else
-                    HotCoolantAmount, HotCoolantFill = colors.green, colors.green
                 end
-            end
-        end
-
-        local CheckCoolantFill = function(v, index, comparison)
-            local ConvertedNumber = ConvertNumber(v[index])
-
-            if comparison == ">" then
-                if ConvertedNumber >= 75 then
-                    CoolantFill = colors.red
-                    EmergencyShutdown()
-                elseif ConvertedNumber >= 50 then
-                    CoolantFill = colors.red
-                elseif ConvertedNumber >= 20 then
-                    CoolantFill = colors.orange
-                else
-                    CoolantFill = colors.green
-                end
+                return colors.red
+            elseif ConvertedNumber >= 3000 then
+                return colors.orange
+            elseif ConvertedNumber >= 1000 then
+                return colors.yellow
             else
-                if ConvertedNumber <= 75 then
-                    CoolantFill = colors.red
-                    EmergencyShutdown()
-                elseif ConvertedNumber <= 50 then
-                    CoolantFill = colors.red
-                elseif ConvertedNumber <= 20 then
-                    CoolantFill = colors.orange
-                else
-                    CoolantFill = colors.green
-                end
+                return colors.green
             end
         end
 
+        local CheckSmallerThanAmount = function(v, index, CanShutdown)
+            local ConvertedNumber = ConvertNumber(v[index])
+            
+            if ConvertedNumber <= 1000 then
+                if CanShutdown then
+                    EmergencyShutdown()
+                end
+                return colors.red
+            elseif ConvertedNumber <= 3000 then
+                return colors.orange
+            elseif ConvertedNumber <= 5000 then
+                return colors.yellow
+            else
+                return colors.green
+            end
+        end
+
+        local CheckBiggerThanFill = function(v, index, CanShutdown)
+            local ConvertedNumber = ConvertNumber(v[index])
+
+            if ConvertedNumber >= 75 then
+                if CanShutdown then
+                    EmergencyShutdown()
+                end
+                return colors.red
+            elseif ConvertedNumber >= 50 then
+                return colors.orange
+            elseif ConvertedNumber >= 20 then
+                return colors.yellow
+            else
+                return colors.green
+            end
+        end
+
+        local CheckSmallerThanFill = function(v, index, CanShutdown)
+            local ConvertedNumber = ConvertNumber(v[index])
+
+            if ConvertedNumber <= 20 then
+                return colors.yellow
+            elseif ConvertedNumber <= 50 then
+                return colors.orange
+            elseif ConvertedNumber <= 75 then 
+                if CanShutdown then
+                    EmergencyShutdown()
+                end
+                return colors.red
+            else
+                return colors.green
+            end
+        end
+
+        local HEHotCoolantAmount = colors.green
+        local HEHotCoolantFill = colors.green
+        local HECoolantAmount = colors.green
+        local HECoolantFill = colors.green
+
+        local FPHotCoolantAmount = colors.green
+        local FPHotCoolantFill = colors.green
+        local FPCoolantAmount = colors.green
+        local FPCoolantFill = colors.green
 
         for _, Screen in pairs(CoolantScreens) do
             local Mon = Screen
@@ -370,28 +397,35 @@ local Update = function()
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
 
-                    CheckCoolantFill(v, 4, ">")
-                    CheckCoolantAmount(v, 1, ">")
+                    HEHotCoolantAmount = CheckBiggerThanAmount(v, 1, true)
+                    HEHotCoolantFill = CheckBiggerThanFill(v, 4, true)
+
+                    HECoolantAmount = CheckBiggerThanAmount(v, 5, false)
+                    HECoolantFill = CheckBiggerThanFill(v, 8, false)
 
                     UIF.DrawText(Mon, 2, 1, "Reactor Coolant Status ["..Mon.ScreenID.."]", DefaultTextColor, DefaultBackgroundColor)
                     UIF.DrawText(Mon, 0, 3, UIF.LineBreakText(Mon, " Heat Exchanger Info "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Hot Coolant Amount:", v[1].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Hot Coolant Fill Stand:", v[4].." %", DefaultTextColor, CoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Hot Coolant Amount:", v[1].." mB", DefaultTextColor, HEHotCoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Hot Coolant Fill Stand:", v[4].." %", DefaultTextColor, HEHotCoolantFill, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[5].." mB", DefaultTextColor, HotCoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[8].." %", DefaultTextColor, HotCoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[5].." mB", DefaultTextColor, HECoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[8].." %", DefaultTextColor, HECoolantFill, DefaultBackgroundColor)
 
-                    CheckCoolantFill(v, 9, "<")
-                    CheckCoolantAmount(v, 13, ">")
+
+                    FPHotCoolantAmount = CheckSmallerThanAmount(v, 9, true)
+                    FPHotCoolantFill = CheckSmallerThanFill(v, 12, true)
+
+                    FPCoolantAmount = CheckBiggerThanAmount(v, 13, true)
+                    FPCoolantFill = CheckBiggerThanFill(v, 16, true)
 
                     UIF.DrawText(Mon, 0, 11, UIF.LineBreakText(Mon, " Fluid Port Info "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 13, 0, "Coolant Amount:", v[9].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 14, 0, "Coolant Fill Stand:", v[12].." %", DefaultTextColor, CoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 13, 0, "Coolant Amount:", v[9].." mB", DefaultTextColor, FPCoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 14, 0, "Coolant Fill Stand:", v[12].." %", DefaultTextColor, FPCoolantFill, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 16, 0, "Hot Coolant Amount:", v[13].." mB", DefaultTextColor, HotCoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 17, 0, "Hot Coolant Fill Stand:", v[16].." %", DefaultTextColor, HotCoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 16, 0, "Hot Coolant Amount:", v[13].." mB", DefaultTextColor, FPHotCoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 17, 0, "Hot Coolant Fill Stand:", v[16].." %", DefaultTextColor, FPHotCoolantFill, DefaultBackgroundColor)
                 end
             end
         end
