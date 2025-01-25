@@ -312,47 +312,11 @@ local Update = function()
             [16] = Fill
         ]]
 
-        local CheckBiggerThanAmount = function(v, index, CanShutdown)
-            local ConvertedNumber = ConvertNumber(v[index])
-
-            if ConvertedNumber >= 5000 then
-                if CanShutdown then
-                    EmergencyShutdown()
-                end
-                return colors.red
-            elseif ConvertedNumber >= 3000 then
-                return colors.orange
-            elseif ConvertedNumber >= 1000 then
-                return colors.yellow
-            else
-                return colors.green
-            end
-        end
-
-        local CheckSmallerThanAmount = function(v, index, CanShutdown)
-            local ConvertedNumber = ConvertNumber(v[index])
-            
-            if ConvertedNumber <= 1000 then
-                if CanShutdown then
-                    EmergencyShutdown()
-                end
-                return colors.red
-            elseif ConvertedNumber <= 3000 then
-                return colors.orange
-            elseif ConvertedNumber <= 5000 then
-                return colors.yellow
-            else
-                return colors.green
-            end
-        end
-
-        local CheckBiggerThanFill = function(v, index, CanShutdown)
+        local CheckHEHotCoolant = function(v, index)
             local ConvertedNumber = ConvertNumber(v[index])
 
             if ConvertedNumber >= 75 then
-                if CanShutdown then
-                    EmergencyShutdown()
-                end
+                EmergencyShutdown()
                 return colors.red
             elseif ConvertedNumber >= 50 then
                 return colors.orange
@@ -363,18 +327,46 @@ local Update = function()
             end
         end
 
-        local CheckSmallerThanFill = function(v, index, CanShutdown)
+        local CheckHECoolant = function(v, index)
             local ConvertedNumber = ConvertNumber(v[index])
 
-            if ConvertedNumber <= 20 then
-                return colors.yellow
-            elseif ConvertedNumber <= 50 then
-                return colors.orange
-            elseif ConvertedNumber <= 75 then 
-                if CanShutdown then
-                    EmergencyShutdown()
-                end
+            if ConvertedNumber >= 80 then
                 return colors.red
+            elseif ConvertedNumber >= 60 then
+                return colors.orange
+            elseif ConvertedNumber >= 40 then
+                return colors.yellow
+            else
+                return colors.green
+            end
+        end
+
+
+        local CheckFPCoolant = function(v, index)
+            local ConvertedNumber = ConvertNumber(v[index])
+
+            if ConvertedNumber <= 40 then
+                EmergencyShutdown()
+                return colors.red
+            elseif ConvertedNumber <= 60 then
+                return colors.orange
+            elseif ConvertedNumber <= 80 then
+                return colors.yellow
+            else
+                return colors.green
+            end
+        end
+
+        local CheckFPHotCoolant = function(v, index)
+            local ConvertedNumber = ConvertNumber(v[index])
+
+            if ConvertedNumber >= 70 then
+                EmergencyShutdown()
+                return colors.red
+            elseif ConvertedNumber >= 50 then
+                return colors.orange
+            elseif ConvertedNumber >= 20 then
+                return colors.yellow
             else
                 return colors.green
             end
@@ -393,8 +385,8 @@ local Update = function()
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
 
-                    HEHotCoolant = CheckBiggerThanFill(v, 4, true)
-                    HECoolant = CheckBiggerThanFill(v, 8, false)
+                    HEHotCoolant = CheckHEHotCoolant(v, 4)
+                    HECoolant = CheckHECoolant(v, 8)
 
                     UIF.DrawText(Mon, 2, 1, "Reactor Coolant Status ["..Mon.ScreenID.."]", DefaultTextColor, DefaultBackgroundColor)
                     UIF.DrawText(Mon, 0, 3, UIF.LineBreakText(Mon, " Heat Exchanger Info "), DefaultTextColor, DefaultBackgroundColor)
@@ -406,8 +398,8 @@ local Update = function()
                     UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[8].." %", DefaultTextColor, HECoolant, DefaultBackgroundColor)
 
 
-                    FPCoolant = CheckSmallerThanFill(v, 12, true)
-                    FPHotCoolant = CheckBiggerThanFill(v, 16, true)
+                    FPCoolant = CheckFPCoolant(v, 12)
+                    FPHotCoolant = CheckFPHotCoolant(v, 16)
 
                     UIF.DrawText(Mon, 0, 11, UIF.LineBreakText(Mon, " Fluid Port Info "), DefaultTextColor, DefaultBackgroundColor)
 
