@@ -380,15 +380,11 @@ local Update = function()
             end
         end
 
-        local HEHotCoolantAmount = colors.green
-        local HEHotCoolantFill = colors.green
-        local HECoolantAmount = colors.green
-        local HECoolantFill = colors.green
+        local HEHotCoolant = colors.green
+        local HECoolant = colors.green
 
-        local FPHotCoolantAmount = colors.green
-        local FPHotCoolantFill = colors.green
-        local FPCoolantAmount = colors.green
-        local FPCoolantFill = colors.green
+        local FPHotCoolant = colors.green
+        local FPCoolant = colors.green
 
         for _, Screen in pairs(CoolantScreens) do
             local Mon = Screen
@@ -397,35 +393,29 @@ local Update = function()
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
 
-                    HEHotCoolantAmount = CheckBiggerThanAmount(v, 1, true)
-                    HEHotCoolantFill = CheckBiggerThanFill(v, 4, true)
-
-                    HECoolantAmount = CheckBiggerThanAmount(v, 5, false)
-                    HECoolantFill = CheckBiggerThanFill(v, 8, false)
+                    HEHotCoolant = CheckBiggerThanFill(v, 4, true)
+                    HECoolant = CheckBiggerThanFill(v, 8, false)
 
                     UIF.DrawText(Mon, 2, 1, "Reactor Coolant Status ["..Mon.ScreenID.."]", DefaultTextColor, DefaultBackgroundColor)
                     UIF.DrawText(Mon, 0, 3, UIF.LineBreakText(Mon, " Heat Exchanger Info "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Hot Coolant Amount:", v[1].." mB", DefaultTextColor, HEHotCoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Hot Coolant Fill Stand:", v[4].." %", DefaultTextColor, HEHotCoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Hot Coolant Amount:", v[1].." mB", DefaultTextColor, HEHotCoolant, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Hot Coolant Fill Stand:", v[4].." %", DefaultTextColor, HEHotCoolant, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[5].." mB", DefaultTextColor, HECoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[8].." %", DefaultTextColor, HECoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[5].." mB", DefaultTextColor, HECoolant, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[8].." %", DefaultTextColor, HECoolant, DefaultBackgroundColor)
 
 
-                    FPHotCoolantAmount = CheckSmallerThanAmount(v, 9, true)
-                    FPHotCoolantFill = CheckSmallerThanFill(v, 12, true)
-
-                    FPCoolantAmount = CheckBiggerThanAmount(v, 13, true)
-                    FPCoolantFill = CheckBiggerThanFill(v, 16, true)
+                    FPCoolant = CheckBiggerThanFill(v, 12, true)
+                    FPHotCoolant = CheckSmallerThanFill(v, 16, true)
 
                     UIF.DrawText(Mon, 0, 11, UIF.LineBreakText(Mon, " Fluid Port Info "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 13, 0, "Coolant Amount:", v[9].." mB", DefaultTextColor, FPCoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 14, 0, "Coolant Fill Stand:", v[12].." %", DefaultTextColor, FPCoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 13, 0, "Coolant Amount:", v[9].." mB", DefaultTextColor, FPCoolant, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 14, 0, "Coolant Fill Stand:", v[12].." %", DefaultTextColor, FPCoolant, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 16, 0, "Hot Coolant Amount:", v[13].." mB", DefaultTextColor, FPHotCoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 17, 0, "Hot Coolant Fill Stand:", v[16].." %", DefaultTextColor, FPHotCoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 16, 0, "Hot Coolant Amount:", v[13].." mB", DefaultTextColor, FPHotCoolant, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 17, 0, "Hot Coolant Fill Stand:", v[16].." %", DefaultTextColor, FPHotCoolant, DefaultBackgroundColor)
                 end
             end
         end
