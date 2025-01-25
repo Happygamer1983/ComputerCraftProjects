@@ -1,20 +1,24 @@
 local VersionURL = "https://raw.githubusercontent.com/Happygamer1983/ComputerCraftProjects/refs/heads/main/src/VERSION"
 local VersionFile = fs.open("VERSION", "r")
+local Config = require("/lib/PerfConfig")
 
 local LoadingErrorPrint = function(text, x, y)
-    Mon.screen.setBackgroundColor(colors.black)
-    Mon.screen.setTextColor(colors.red)
-    Mon.screen.setCursorPos(x,y)
-    Mon.screen.write(text)
+    local Screen = peripheral.wrap(Config["Reactor_Screen_1"])
+    Screen.setBackgroundColor(colors.black)
+    Screen.setTextColor(colors.red)
+    Screen.setCursorPos(x,y)
+    Screen.write(text)
 end
 
 print("Loading program...")
-
 assert(http.get(VersionURL).readAll() == VersionFile.readAll(), LoadingErrorPrint("Outdated version, please run install.lua again", 1,1))
 assert(peripheral.find("modem"), LoadingErrorPrint("No Modem attached!", 1,1))
 -- More checks
-
 print("Done!")
+
+local UIF = require("/lib/UIFunctions")
+local Taskmaster = require("/lib/taskmaster")()
+
 local UpdatingTick = 0
 
 local ReactorScreens = {}
@@ -23,9 +27,6 @@ local CoolantScreens = {}
 local DefaultTextColor = colors.white
 local DefaultBackgroundColor = colors.black
 
-local UIF = require("/lib/UIFunctions")
-local Config = require("/lib/PerfConfig")
-local Taskmaster = require("/lib/taskmaster")()
 local expect = require "cc.expect"
 local expect, field = expect.expect, expect.field
 
