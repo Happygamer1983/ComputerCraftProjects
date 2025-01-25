@@ -281,39 +281,55 @@ local Update = function()
 
         -- Heat Gen Card + Advanced Fluid Card
         --[[
-            Coolant Info:
+            Heat Exchanger Info:
+            -- Hot Coolant
             [-] = Name (Coolant name) -- REMOVED (Causes Java Error on server)
             [1] = Amount (mB)
             [2] = Free (mB)
             [3] = Capacity (mB)
             [4] = Fill (%)
 
-            -- Hot Coolant
+            -- Cool Coolant
             [-] = Name (Coolant name) -- REMOVED (Causes Java Error on server)
             [5] = Amount (mB)
             [6] = Free (mB)
             [7] = Capacity (mB)
             [8] = Fill
+
+            Fluid Port Info:
+            -- Cool Coolant
+            [-] = Name (Coolant name) -- REMOVED (Causes Java Error on server)
+            [9] = Amount (mB)
+            [10] = Free (mB)
+            [11] = Capacity (mB)
+            [12] = Fill (%)
+
+            -- Hot Coolant
+            [-] = Name (Coolant name) -- REMOVED (Causes Java Error on server)
+            [13] = Amount (mB)
+            [14] = Free (mB)
+            [15] = Capacity (mB)
+            [16] = Fill
         ]]
         for _, Screen in pairs(CoolantScreens) do
             local Mon = Screen
             UIF.Clear(Mon)
 
-            local StatusColor = colors.red
-            local CoolantAmount = colors.green
-            local CoolantFill = colors.green
             local HotCoolantAmount = colors.green
             local HotCoolantFill = colors.green
+            local CoolantAmount = colors.green
+            local CoolantFill = colors.green
+            
 
 
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
-                    if ConvertNumber(v[4]) <= 20 then
+                    if ConvertNumber(v[4]) >= 75 then
                         CoolantFill = colors.red
                         EmergencyShutdown()
-                    elseif ConvertNumber(v[4]) <= 50 then
+                    elseif ConvertNumber(v[4]) >= 50 then
                         CoolantFill = colors.red
-                    elseif ConvertNumber(v[4]) <= 75 then
+                    elseif ConvertNumber(v[4]) >= 20 then
                         CoolantFill = colors.orange
                     else
                         CoolantFill = colors.green
@@ -322,6 +338,7 @@ local Update = function()
                     if ConvertNumber(v[1]) >= 4000 then
                         HotCoolantAmount = colors.red
                         HotCoolantFill = colors.red
+                        EmergencyShutdown()
                     elseif ConvertNumber(v[1]) >= 2000 then
                         HotCoolantAmount = colors.orange
                         HotCoolantFill = colors.orange
@@ -335,15 +352,54 @@ local Update = function()
 
                     UIF.DrawText(Mon, 2, 1, "Reactor Coolant Status ["..Mon.ScreenID.."]", DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawText(Mon, 0, 3, UIF.LineBreakText(Mon, " Cool Coolant "), DefaultTextColor, DefaultBackgroundColor)
+                    UIF.DrawText(Mon, 0, 3, UIF.LineBreakText(Mon, " Heat Exchanger Info "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 4, 0, "Coolant Amount:", v[5].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Coolant Fill Stand:", v[8].." %", DefaultTextColor, CoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 4, 0, "Hot Coolant Amount:", v[1].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Hot Coolant Fill Stand:", v[9].." %", DefaultTextColor, CoolantFill, DefaultBackgroundColor)
 
-                    UIF.DrawText(Mon, 0, 7, UIF.LineBreakText(Mon, " Hot Coolant "), DefaultTextColor, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 6, 0, "Coolant Amount:", v[5].." mB", DefaultTextColor, HotCoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 7, 0, "Coolant Fill Stand:", v[8].." %", DefaultTextColor, HotCoolantFill, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[1].." mB", DefaultTextColor, HotCoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[4].." %", DefaultTextColor, HotCoolantFill, DefaultBackgroundColor)
+
+
+
+                    local CoolantAmount = colors.green
+                    local CoolantFill = colors.green
+                    local HotCoolantAmount = colors.green
+                    local HotCoolantFill = colors.green
+
+                    if ConvertNumber(v[9]) <= 20 then
+                        CoolantFill = colors.red
+                        EmergencyShutdown()
+                    elseif ConvertNumber(v[9]) <= 50 then
+                        CoolantFill = colors.red
+                    elseif ConvertNumber(v[9]) <= 75 then
+                        CoolantFill = colors.orange
+                    else
+                        CoolantFill = colors.green
+                    end
+
+                    if ConvertNumber(v[13]) >= 4000 then
+                        HotCoolantAmount = colors.red
+                        HotCoolantFill = colors.red
+                    elseif ConvertNumber(v[13]) >= 2000 then
+                        HotCoolantAmount = colors.orange
+                        HotCoolantFill = colors.orange
+                    elseif ConvertNumber(v[13]) >= 1000 then
+                        HotCoolantAmount = colors.yellow
+                        HotCoolantFill = colors.yellow
+                    else
+                        HotCoolantAmount = colors.green
+                        HotCoolantFill = colors.green
+                    end
+
+                    UIF.DrawText(Mon, 0, 9, UIF.LineBreakText(Mon, " Fluid Port Info "), DefaultTextColor, DefaultBackgroundColor)
+
+                    UIF.DrawTextLeftRight(Mon, 2, 11, 0, "Coolant Amount:", v[9].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 12, 0, "Coolant Fill Stand:", v[12].." %", DefaultTextColor, CoolantFill, DefaultBackgroundColor)
+
+                    UIF.DrawTextLeftRight(Mon, 2, 14, 0, "Hot Coolant Amount:", v[13].." mB", DefaultTextColor, HotCoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 15, 0, "Hot Coolant Fill Stand:", v[16].." %", DefaultTextColor, HotCoolantFill, DefaultBackgroundColor)
                 end
             end
         end
