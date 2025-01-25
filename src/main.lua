@@ -15,9 +15,9 @@ local CoolantScreens = {}
 local DefaultTextColor = colors.white
 local DefaultBackgroundColor = colors.black
 
-local UIF = require("UIFunctions")
-local Config = require("PerfConfig")
-local Taskmaster = require("taskmaster")()
+local UIF = require("/lib/UIFunctions")
+local Config = require("/lib/PerfConfig")
+local Taskmaster = require("/lib/taskmaster")()
 local expect = require "cc.expect"
 local expect, field = expect.expect, expect.field
 
