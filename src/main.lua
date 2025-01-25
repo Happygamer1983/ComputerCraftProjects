@@ -308,24 +308,24 @@ local Update = function()
 
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
-                    if ConvertNumber(v[4]) <= 20 then
+                    if ConvertNumber(v[8]) <= 20 then
                         CoolantFill = colors.red
                         EmergencyShutdown()
-                    elseif ConvertNumber(v[4]) <= 50 then
+                    elseif ConvertNumber(v[8]) <= 50 then
                         CoolantFill = colors.red
-                    elseif ConvertNumber(v[4]) <= 75 then
+                    elseif ConvertNumber(v[8]) <= 75 then
                         CoolantFill = colors.orange
                     else
                         CoolantFill = colors.green
                     end
 
-                    if ConvertNumber(v[5]) >= 4000 then
+                    if ConvertNumber(v[1]) >= 4000 then
                         HotCoolantAmount = colors.red
                         HotCoolantFill = colors.red
-                    elseif ConvertNumber(v[5]) >= 2000 then
+                    elseif ConvertNumber(v[1]) >= 2000 then
                         HotCoolantAmount = colors.orange
                         HotCoolantFill = colors.orange
-                    elseif ConvertNumber(v[5]) >= 1000 then
+                    elseif ConvertNumber(v[1]) >= 1000 then
                         HotCoolantAmount = colors.yellow
                         HotCoolantFill = colors.yellow
                     else
@@ -337,13 +337,13 @@ local Update = function()
 
                     UIF.DrawText(Mon, 0, 3, UIF.LineBreakText(Mon, " Cool Coolant "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 4, 0, "Coolant Amount:", v[1].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Coolant Fill Stand:", v[4].." %", DefaultTextColor, CoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 4, 0, "Coolant Amount:", v[5].." mB", DefaultTextColor, CoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 5, 0, "Coolant Fill Stand:", v[8].." %", DefaultTextColor, CoolantFill, DefaultBackgroundColor)
 
                     UIF.DrawText(Mon, 0, 7, UIF.LineBreakText(Mon, " Hot Coolant "), DefaultTextColor, DefaultBackgroundColor)
 
-                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[5].." mB", DefaultTextColor, HotCoolantAmount, DefaultBackgroundColor)
-                    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[8].." %", DefaultTextColor, HotCoolantFill, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 8, 0, "Coolant Amount:", v[1].." mB", DefaultTextColor, HotCoolantAmount, DefaultBackgroundColor)
+                    UIF.DrawTextLeftRight(Mon, 2, 9, 0, "Coolant Fill Stand:", v[4].." %", DefaultTextColor, HotCoolantFill, DefaultBackgroundColor)
                 end
             end
         end
