@@ -1,9 +1,17 @@
 local VersionURL = "https://raw.githubusercontent.com/Happygamer1983/ComputerCraftProjects/refs/heads/main/src/VERSION"
 local VersionFile = fs.open("VERSION", "r")
+
+local LoadingErrorPrint = function(text, x, y)
+    Mon.screen.setBackgroundColor(colors.black)
+    Mon.screen.setTextColor(colors.red)
+    Mon.screen.setCursorPos(x,y)
+    Mon.screen.write(text)
+end
+
 print("Loading program...")
 
-assert(http.get(VersionURL).readAll() == VersionFile.readAll(), "Outdated version, please run install.lua again")
-assert(peripheral.find("modem"), "No Modem attached!")
+assert(http.get(VersionURL).readAll() == VersionFile.readAll(), LoadingErrorPrint("Outdated version, please run install.lua again", 1,1))
+assert(peripheral.find("modem"), LoadingErrorPrint("No Modem attached!", 1,1))
 -- More checks
 
 print("Done!")
