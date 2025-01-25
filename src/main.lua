@@ -4,6 +4,7 @@ local Config = require("/lib/PerfConfig")
 
 local LoadingErrorPrint = function(text, x, y)
     local Screen = peripheral.wrap(Config["Reactor_Screen_1"])
+    Screen.clear()
     Screen.setBackgroundColor(colors.black)
     Screen.setTextColor(colors.red)
     Screen.setCursorPos(x,y)
@@ -11,7 +12,7 @@ local LoadingErrorPrint = function(text, x, y)
 end
 
 print("Loading program...")
-assert(http.get(VersionURL).readAll() == VersionFile.readAll(), LoadingErrorPrint("Outdated version, please run install.lua again", 1,1))
+assert(http.get(VersionURL).readAll() == VersionFile.readAll(), LoadingErrorPrint("Outdated version, run installer.lua!", 1,1))
 assert(peripheral.find("modem"), LoadingErrorPrint("No Modem attached!", 1,1))
 -- More checks
 print("Done!")
