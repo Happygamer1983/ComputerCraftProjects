@@ -308,12 +308,12 @@ local Update = function()
 
             if Screen.ScreenData then
                 for i, v in pairs(Screen.ScreenData) do
-                    if ConvertNumber(v[8]) <= 20 then
+                    if ConvertNumber(v[4]) <= 20 then
                         CoolantFill = colors.red
                         EmergencyShutdown()
-                    elseif ConvertNumber(v[8]) <= 50 then
+                    elseif ConvertNumber(v[4]) <= 50 then
                         CoolantFill = colors.red
-                    elseif ConvertNumber(v[8]) <= 75 then
+                    elseif ConvertNumber(v[4]) <= 75 then
                         CoolantFill = colors.orange
                     else
                         CoolantFill = colors.green
