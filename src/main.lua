@@ -229,6 +229,7 @@ local Update = function()
             [5] = hU/t output (Fluid Reactor)
             [6] = remaining
         ]]
+            
         for _, Screen in pairs(ReactorScreens) do
             local Mon = Screen
             UIF.Clear(Mon)
@@ -279,7 +280,7 @@ local Update = function()
             end  
         end
 
-        -- Heat Gen Card + Advanced Fluid Card
+        -- Advanced Fluid Card
         --[[
             Heat Exchanger Info:
             -- Hot Coolant
